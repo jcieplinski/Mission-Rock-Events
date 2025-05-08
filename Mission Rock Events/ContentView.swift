@@ -65,6 +65,9 @@ struct ContentView: View {
             }
             .scrollTargetLayout()
           }
+          .onAppear {
+            currentEvent = eventsForSelectedDate.first
+          }
           .scrollPosition(id: $currentEvent)
           .contentMargins(22, for: .scrollContent)
           .scrollTargetBehavior(.viewAligned)
@@ -74,7 +77,7 @@ struct ContentView: View {
       .onChange(of: selectedDate) {
         currentEvent = eventsForSelectedDate.first
       }
-      .padding(.bottom, 22)
+      .padding(.bottom, 11)
       .background(
         ZStack {
           Image("backdrop")
@@ -84,7 +87,7 @@ struct ContentView: View {
             .foregroundStyle(.ultraThinMaterial)
 
             Rectangle()
-              .foregroundStyle(currentEvent?.eventLocation.backgroundColor ?? .noEventGreen)
+              .foregroundStyle(currentEvent?.eventLocation.backgroundColor ?? Color.noEvent)
               .opacity(0.3)
         }
         
@@ -133,12 +136,18 @@ struct ContentView: View {
           } label: {
             Label("List", systemImage: "list.triangle")
           }
-          .fullScreenCover(isPresented: $showEventList) {
+          .sheet(isPresented: $showEventList) {
             EventsList()
           }
         }
         
         ToolbarItemGroup(placement: .bottomBar) {
+          Button {
+            deleteAllEvents()
+          } label: {
+            Label("Delete Fake Events", systemImage: "trash")
+          }
+          
           Spacer()
           
           Button {
@@ -151,6 +160,16 @@ struct ContentView: View {
       .navigationTitle((selectedDate == nil ? "Today" : selectedDate?.formatted(date: .abbreviated, time: .omitted)) ?? "")
       .toolbarTitleDisplayMode(.inlineLarge)
     }
+  }
+  
+  private func deleteAllEvents() {
+    events.forEach { event in
+      modelContext.delete(event)
+    }
+    
+    try? modelContext.save()
+    
+    currentEvent = nil
   }
   
   private func addFakeEvent() {

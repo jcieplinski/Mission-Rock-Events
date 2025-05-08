@@ -131,7 +131,7 @@ enum EventType: String, Codable, CaseIterable {
     case .concert:
       return "concert"
     case .other:
-      return ""
+      return "otherEvent"
     }
   }
 }

@@ -52,6 +52,8 @@ struct EventCard: View {
             Text(event.date, style: .date)
             Text(event.time, style: .time)
           }
+          .lineLimit(1)
+          .minimumScaleFactor(0.4)
           .fontDesign(.rounded)
           .multilineTextAlignment(.trailing)
           .foregroundStyle(event.eventLocation.textColor)

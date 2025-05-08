@@ -73,7 +73,7 @@ struct NoEventCard: View {
           .foregroundStyle(.thinMaterial)
         
         Rectangle()
-          .foregroundStyle(.noEventGreen).opacity(0.5)
+          .foregroundStyle(Color.noEvent).opacity(0.5)
       }
     )
     .onAppear {
