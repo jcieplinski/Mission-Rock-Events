@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import WidgetKit
 
 struct ContentView: View {
   @Environment(\.modelContext) private var modelContext
@@ -170,6 +171,7 @@ struct ContentView: View {
     try? modelContext.save()
     
     currentEvent = nil
+    WidgetCenter.shared.reloadAllTimelines()
   }
   
   private func addFakeEvent() {
@@ -187,6 +189,7 @@ struct ContentView: View {
     )
     
     modelContext.insert(event)
+    WidgetCenter.shared.reloadAllTimelines()
   }
   
   private func getRandomEventType() -> EventType {
