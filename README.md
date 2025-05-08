@@ -1,4 +1,4 @@
-# Mission-Rock-Events
+# qui
 
 This is a little project I built to allow residents of the Mission Rock neighborhood in San Francisco to see which events were happening either at Oracle Park or at the Chase Center, or potentially other things happening in the area. 
 
@@ -11,4 +11,4 @@ The reason you may want to know this as a resident are the following:
 - maybe you'd actually like to attend some of these events
 
 
-The app runs on iOS exclusively for now. I'd be open to an Android version if someone wanted to help out on that front.
+The app runs on iOS exclusively for now. I'd be open to an Android version if someone wanted to help out on that front. If all goes well, perhaps I will open it up to other neighborhoods in other cities as well.
