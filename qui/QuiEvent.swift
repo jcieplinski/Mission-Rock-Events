@@ -1,5 +1,5 @@
 //
-//  MREvent.swift
+//  QuiEvent.swift
 //  Mission Rock Events
 //
 //  Created by Joe Cieplinski on 5/7/25.
@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 @Model
-final class MREvent: Codable, Equatable {
+final class QuiEvent: Codable, Equatable {
   internal init(
     title: String,
     type: String,
@@ -88,8 +88,8 @@ final class MREvent: Codable, Equatable {
     try container.encode(source, forKey: .source)
   }
   
-  static var previewEvent: MREvent {
-    return MREvent(
+  static var previewEvent: QuiEvent {
+    return QuiEvent(
       title: "SF Giants vs. Colorado Rockies",
       type: EventType.baseball.rawValue,
       location: EventLocation.oraclePark.title,
@@ -101,8 +101,8 @@ final class MREvent: Codable, Equatable {
     )
   }
   
-  static var previewNextEvent: MREvent {
-    return MREvent(
+  static var previewNextEvent: QuiEvent {
+    return QuiEvent(
       title: "SF Giants vs. Colorado Rockies",
       type: EventType.baseball.rawValue,
       location: EventLocation.oraclePark.title,

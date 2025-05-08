@@ -57,9 +57,9 @@
 				Assets.xcassets,
 				Dongles.swift,
 				EventCard.swift,
-				MREvent.swift,
 				NoEventCard.swift,
 				NoEventTitle.swift,
+				QuiEvent.swift,
 			);
 			target = AED6B43C2DCD00B100FB6EB2 /* qui widget extension */;
 		};

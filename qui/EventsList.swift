@@ -12,7 +12,7 @@ import EventKit
 struct EventsList: View {
   @Environment(\.modelContext) private var modelContext
   @Environment(\.dismiss) private var dismiss
-  @Query(sort: \MREvent.date) private var events: [MREvent]
+  @Query(sort: \QuiEvent.date) private var events: [QuiEvent]
   
   var body: some View {
     NavigationStack {
@@ -94,5 +94,5 @@ struct EventsList: View {
 
 #Preview {
   EventsList()
-    .modelContainer(for: MREvent.self, inMemory: true)
+    .modelContainer(for: QuiEvent.self, inMemory: true)
 }

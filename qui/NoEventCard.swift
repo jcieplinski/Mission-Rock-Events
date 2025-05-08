@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NoEventCard: View {
-  let nextEvent: MREvent?
+  let nextEvent: QuiEvent?
   
   @State private var noEventTitle: String = ""
   @State private var noEventSubtitle: String = ""
@@ -85,7 +85,7 @@ struct NoEventCard: View {
 
 #Preview {
   VStack {
-    NoEventCard(nextEvent: MREvent.previewNextEvent)
+    NoEventCard(nextEvent: QuiEvent.previewNextEvent)
       .clipShape(RoundedRectangle(cornerRadius: 28))
       .shadow(radius: 8)
       .padding(22)

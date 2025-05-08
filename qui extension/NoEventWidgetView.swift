@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NoEventWidgetView: View {
-  let nextEvent: MREvent?
+  let nextEvent: QuiEvent?
   
   @State private var noEventTitle: String = ""
   @State private var noEventSubtitle: String = ""

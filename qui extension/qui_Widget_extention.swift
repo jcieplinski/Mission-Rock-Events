@@ -46,13 +46,13 @@ struct Mission_Rock_Events_Widget_ExtensionEntryView : View {
   @Environment(\.widgetFamily) var family
   
   var entry: Provider.Entry
-  @Query(sort: \MREvent.date) private var events: [MREvent]
+  @Query(sort: \QuiEvent.date) private var events: [QuiEvent]
   
-  var todayEvents: [MREvent] {
+  var todayEvents: [QuiEvent] {
     return events.filter { $0.date.isToday() }.sorted { $0.date < $1.date }
   }
   
-  var nextEvent: MREvent? {
+  var nextEvent: QuiEvent? {
     return events
       .filter { $0.date > Calendar.current.startOfDay(for: Date()) }
       .sorted { $0.date < $1.date }
@@ -79,7 +79,7 @@ struct Mission_Rock_Events_Widget_ExtensionEntryView : View {
         }
       case .accessoryRectangular:
         if let todayEvent = todayEvents.first {
-          HStack {  
+          HStack {
             Image(todayEvent.eventType.image)
               .resizable()
               .aspectRatio(contentMode: .fit)
@@ -111,7 +111,7 @@ struct Mission_Rock_Events_Widget_Extension: Widget {
     AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: Provider()) { entry in
       Mission_Rock_Events_Widget_ExtensionEntryView(entry: entry)
         .containerBackground(.fill.tertiary, for: .widget)
-        .modelContainer(for: [MREvent.self])
+        .modelContainer(for: [QuiEvent.self])
     }
     .contentMarginsDisabled()
     .supportedFamilies([

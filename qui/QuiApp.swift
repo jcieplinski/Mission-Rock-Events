@@ -1,5 +1,5 @@
 //
-//  Mission_Rock_EventsApp.swift
+//  QuiApp.swift
 //  Mission Rock Events
 //
 //  Created by Joe Cieplinski on 5/7/25.
@@ -9,10 +9,10 @@ import SwiftUI
 import SwiftData
 
 @main
-struct Mission_Rock_EventsApp: App {
+struct QuiApp: App {
   var sharedModelContainer: ModelContainer = {
     let schema = Schema([
-      MREvent.self,
+      QuiEvent.self,
     ])
     
     let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)

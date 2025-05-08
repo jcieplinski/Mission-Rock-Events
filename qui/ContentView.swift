@@ -11,20 +11,20 @@ import WidgetKit
 
 struct ContentView: View {
   @Environment(\.modelContext) private var modelContext
-  @Query(sort: \MREvent.date) private var events: [MREvent]
+  @Query(sort: \QuiEvent.date) private var events: [QuiEvent]
   
   @State private var selectedDate: Date?
-  @State private var currentEvent: MREvent?
+  @State private var currentEvent: QuiEvent?
   @State private var showDatePicker: Bool = false
   @State private var showEventList: Bool = false
   
   let dateFormatter = DateFormatter()
   
-  var todayEvents: [MREvent] {
+  var todayEvents: [QuiEvent] {
     return events.filter { $0.date.isToday() }.sorted { $0.date < $1.date }
   }
   
-  var eventsForSelectedDate: [MREvent] {
+  var eventsForSelectedDate: [QuiEvent] {
     guard let selectedDate else { return todayEvents }
     
     return events.filter {
@@ -32,7 +32,7 @@ struct ContentView: View {
     }.sorted { $0.date < $1.date }
   }
 
-  var nextEventAfter: MREvent? {
+  var nextEventAfter: QuiEvent? {
     guard let selectedDate else { return nil }
     
     return events
@@ -177,8 +177,8 @@ struct ContentView: View {
   private func addFakeEvent() {
     let eventType = getRandomEventType()
 
-    let event = MREvent(
-      title: "This is an event",
+    let event = QuiEvent(
+      title: "This is an event with a longer name",
       type: eventType.rawValue,
       location: eventType == .baseball ? EventLocation.oraclePark.title : EventLocation.chaseCenter.title,
       date: Date(),
@@ -189,7 +189,11 @@ struct ContentView: View {
     )
     
     modelContext.insert(event)
-    WidgetCenter.shared.reloadAllTimelines()
+    
+    Task {
+      try? await Task.sleep(for: .seconds(1))
+      WidgetCenter.shared.reloadAllTimelines()
+    }
   }
   
   private func getRandomEventType() -> EventType {
@@ -200,5 +204,5 @@ struct ContentView: View {
 
 #Preview {
   ContentView()
-    .modelContainer(for: MREvent.self, inMemory: true)
+    .modelContainer(for: QuiEvent.self, inMemory: true)
 }

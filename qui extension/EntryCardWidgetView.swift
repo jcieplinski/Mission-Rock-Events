@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct EntryCardWidgetView: View {
-  let event: MREvent
+  let event: QuiEvent
   
   var body: some View {
-    VStack {
+    VStack(spacing: 6) {
       HStack {
         Text(event.title)
           .font(.title3)
@@ -31,7 +31,7 @@ struct EntryCardWidgetView: View {
       Image(event.eventType.image)
         .resizable()
         .aspectRatio(contentMode: .fit)
-        .frame(maxWidth: 40, maxHeight: 40)
+        .frame(maxWidth: 100, maxHeight: 100)
         .shadow(radius: 0.4)
       
       Spacer(minLength: 1)
@@ -78,7 +78,7 @@ struct EntryCardWidgetView: View {
 #Preview {
   VStack {
     EntryCardWidgetView(
-      event: MREvent.previewEvent
+      event: QuiEvent.previewEvent
     )
     .clipShape(RoundedRectangle(cornerRadius: 28))
   }

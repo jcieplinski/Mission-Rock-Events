@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EventCard: View {
-  let event: MREvent
+  let event: QuiEvent
   
   var body: some View {
     VStack {
@@ -72,7 +72,7 @@ struct EventCard: View {
 #Preview {
   VStack {
     EventCard(
-      event: MREvent.previewEvent
+      event: QuiEvent.previewEvent
     )
     .clipShape(RoundedRectangle(cornerRadius: 28))
   }
