@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		AED6B4402DCD00B100FB6EB2 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AED6B43F2DCD00B100FB6EB2 /* WidgetKit.framework */; };
 		AED6B4422DCD00B100FB6EB2 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AED6B4412DCD00B100FB6EB2 /* SwiftUI.framework */; };
-		AED6B4532DCD00B200FB6EB2 /* Mission Rock Events Widget ExtensionExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AED6B43D2DCD00B100FB6EB2 /* Mission Rock Events Widget ExtensionExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		AED6B4532DCD00B200FB6EB2 /* qui widget extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AED6B43D2DCD00B100FB6EB2 /* qui widget extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,7 +29,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				AED6B4532DCD00B200FB6EB2 /* Mission Rock Events Widget ExtensionExtension.appex in Embed Foundation Extensions */,
+				AED6B4532DCD00B200FB6EB2 /* qui widget extension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -37,22 +37,21 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		AE3103AF2DCBCC9200A36CDE /* Mission Rock Events.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mission Rock Events.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		AED6B43D2DCD00B100FB6EB2 /* Mission Rock Events Widget ExtensionExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Mission Rock Events Widget ExtensionExtension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AE3103AF2DCBCC9200A36CDE /* qui.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = qui.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AED6B43D2DCD00B100FB6EB2 /* qui widget extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "qui widget extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AED6B43F2DCD00B100FB6EB2 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		AED6B4412DCD00B100FB6EB2 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
-		AED6B45B2DCD00DD00FB6EB2 /* Mission Rock Events Widget ExtensionExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Mission Rock Events Widget ExtensionExtension.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		AED6B4542DCD00B200FB6EB2 /* Exceptions for "Mission Rock Events Widget Extension" folder in "Mission Rock Events Widget ExtensionExtension" target */ = {
+		AED6B4542DCD00B200FB6EB2 /* Exceptions for "qui extension" folder in "qui widget extension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = AED6B43C2DCD00B100FB6EB2 /* Mission Rock Events Widget ExtensionExtension */;
+			target = AED6B43C2DCD00B100FB6EB2 /* qui widget extension */;
 		};
-		AED6B45A2DCD00C900FB6EB2 /* Exceptions for "Mission Rock Events" folder in "Mission Rock Events Widget ExtensionExtension" target */ = {
+		AED6B45A2DCD00C900FB6EB2 /* Exceptions for "qui" folder in "qui widget extension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Assets.xcassets,
@@ -62,25 +61,25 @@
 				NoEventCard.swift,
 				NoEventTitle.swift,
 			);
-			target = AED6B43C2DCD00B100FB6EB2 /* Mission Rock Events Widget ExtensionExtension */;
+			target = AED6B43C2DCD00B100FB6EB2 /* qui widget extension */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		AE3103B12DCBCC9200A36CDE /* Mission Rock Events */ = {
+		AE3103B12DCBCC9200A36CDE /* qui */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				AED6B45A2DCD00C900FB6EB2 /* Exceptions for "Mission Rock Events" folder in "Mission Rock Events Widget ExtensionExtension" target */,
+				AED6B45A2DCD00C900FB6EB2 /* Exceptions for "qui" folder in "qui widget extension" target */,
 			);
-			path = "Mission Rock Events";
+			path = qui;
 			sourceTree = "<group>";
 		};
-		AED6B4432DCD00B100FB6EB2 /* Mission Rock Events Widget Extension */ = {
+		AED6B4432DCD00B100FB6EB2 /* qui extension */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				AED6B4542DCD00B200FB6EB2 /* Exceptions for "Mission Rock Events Widget Extension" folder in "Mission Rock Events Widget ExtensionExtension" target */,
+				AED6B4542DCD00B200FB6EB2 /* Exceptions for "qui extension" folder in "qui widget extension" target */,
 			);
-			path = "Mission Rock Events Widget Extension";
+			path = "qui extension";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -108,9 +107,8 @@
 		AE3103A62DCBCC9200A36CDE = {
 			isa = PBXGroup;
 			children = (
-				AED6B45B2DCD00DD00FB6EB2 /* Mission Rock Events Widget ExtensionExtension.entitlements */,
-				AE3103B12DCBCC9200A36CDE /* Mission Rock Events */,
-				AED6B4432DCD00B100FB6EB2 /* Mission Rock Events Widget Extension */,
+				AE3103B12DCBCC9200A36CDE /* qui */,
+				AED6B4432DCD00B100FB6EB2 /* qui extension */,
 				AED6B43E2DCD00B100FB6EB2 /* Frameworks */,
 				AE3103B02DCBCC9200A36CDE /* Products */,
 			);
@@ -119,8 +117,8 @@
 		AE3103B02DCBCC9200A36CDE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AE3103AF2DCBCC9200A36CDE /* Mission Rock Events.app */,
-				AED6B43D2DCD00B100FB6EB2 /* Mission Rock Events Widget ExtensionExtension.appex */,
+				AE3103AF2DCBCC9200A36CDE /* qui.app */,
+				AED6B43D2DCD00B100FB6EB2 /* qui widget extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -137,9 +135,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		AE3103AE2DCBCC9200A36CDE /* Mission Rock Events */ = {
+		AE3103AE2DCBCC9200A36CDE /* qui */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AE3103BC2DCBCC9300A36CDE /* Build configuration list for PBXNativeTarget "Mission Rock Events" */;
+			buildConfigurationList = AE3103BC2DCBCC9300A36CDE /* Build configuration list for PBXNativeTarget "qui" */;
 			buildPhases = (
 				AE3103AB2DCBCC9200A36CDE /* Sources */,
 				AE3103AC2DCBCC9200A36CDE /* Frameworks */,
@@ -152,18 +150,18 @@
 				AED6B4522DCD00B200FB6EB2 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				AE3103B12DCBCC9200A36CDE /* Mission Rock Events */,
+				AE3103B12DCBCC9200A36CDE /* qui */,
 			);
-			name = "Mission Rock Events";
+			name = qui;
 			packageProductDependencies = (
 			);
 			productName = "Mission Rock Events";
-			productReference = AE3103AF2DCBCC9200A36CDE /* Mission Rock Events.app */;
+			productReference = AE3103AF2DCBCC9200A36CDE /* qui.app */;
 			productType = "com.apple.product-type.application";
 		};
-		AED6B43C2DCD00B100FB6EB2 /* Mission Rock Events Widget ExtensionExtension */ = {
+		AED6B43C2DCD00B100FB6EB2 /* qui widget extension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AED6B4552DCD00B200FB6EB2 /* Build configuration list for PBXNativeTarget "Mission Rock Events Widget ExtensionExtension" */;
+			buildConfigurationList = AED6B4552DCD00B200FB6EB2 /* Build configuration list for PBXNativeTarget "qui widget extension" */;
 			buildPhases = (
 				AED6B4392DCD00B100FB6EB2 /* Sources */,
 				AED6B43A2DCD00B100FB6EB2 /* Frameworks */,
@@ -174,13 +172,13 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				AED6B4432DCD00B100FB6EB2 /* Mission Rock Events Widget Extension */,
+				AED6B4432DCD00B100FB6EB2 /* qui extension */,
 			);
-			name = "Mission Rock Events Widget ExtensionExtension";
+			name = "qui widget extension";
 			packageProductDependencies = (
 			);
 			productName = "Mission Rock Events Widget ExtensionExtension";
-			productReference = AED6B43D2DCD00B100FB6EB2 /* Mission Rock Events Widget ExtensionExtension.appex */;
+			productReference = AED6B43D2DCD00B100FB6EB2 /* qui widget extension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -201,7 +199,7 @@
 					};
 				};
 			};
-			buildConfigurationList = AE3103AA2DCBCC9200A36CDE /* Build configuration list for PBXProject "Mission Rock Events" */;
+			buildConfigurationList = AE3103AA2DCBCC9200A36CDE /* Build configuration list for PBXProject "qui" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -215,8 +213,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				AE3103AE2DCBCC9200A36CDE /* Mission Rock Events */,
-				AED6B43C2DCD00B100FB6EB2 /* Mission Rock Events Widget ExtensionExtension */,
+				AE3103AE2DCBCC9200A36CDE /* qui */,
+				AED6B43C2DCD00B100FB6EB2 /* qui widget extension */,
 			);
 		};
 /* End PBXProject section */
@@ -258,7 +256,7 @@
 /* Begin PBXTargetDependency section */
 		AED6B4522DCD00B200FB6EB2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = AED6B43C2DCD00B100FB6EB2 /* Mission Rock Events Widget ExtensionExtension */;
+			target = AED6B43C2DCD00B100FB6EB2 /* qui widget extension */;
 			targetProxy = AED6B4512DCD00B200FB6EB2 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -390,7 +388,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "Mission Rock Events/Mission Rock Events.entitlements";
+				CODE_SIGN_ENTITLEMENTS = qui/qui.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = T2N6RA2S89;
@@ -406,7 +404,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.joecieplinski.Mission-Rock-Events";
+				PRODUCT_BUNDLE_IDENTIFIER = com.joecieplinski.qui;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -419,7 +417,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "Mission Rock Events/Mission Rock Events.entitlements";
+				CODE_SIGN_ENTITLEMENTS = qui/qui.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = T2N6RA2S89;
@@ -435,7 +433,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.joecieplinski.Mission-Rock-Events";
+				PRODUCT_BUNDLE_IDENTIFIER = com.joecieplinski.qui;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -448,13 +446,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_ENTITLEMENTS = "Mission Rock Events Widget ExtensionExtension.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "qui Extension/qui Widget Extension.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = T2N6RA2S89;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Mission Rock Events Widget Extension/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Mission Rock Events Widget Extension";
+				INFOPLIST_FILE = "qui extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "qui Widget Extension";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -462,8 +461,9 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.joecieplinski.Mission-Rock-Events.Mission-Rock-Events-Widget-Extension";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.joecieplinski.qui.qui-Widget-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -476,13 +476,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_ENTITLEMENTS = "Mission Rock Events Widget ExtensionExtension.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "qui Extension/qui Widget Extension.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = T2N6RA2S89;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Mission Rock Events Widget Extension/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Mission Rock Events Widget Extension";
+				INFOPLIST_FILE = "qui extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "qui Widget Extension";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -490,8 +491,9 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.joecieplinski.Mission-Rock-Events.Mission-Rock-Events-Widget-Extension";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.joecieplinski.qui.qui-Widget-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -502,7 +504,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AE3103AA2DCBCC9200A36CDE /* Build configuration list for PBXProject "Mission Rock Events" */ = {
+		AE3103AA2DCBCC9200A36CDE /* Build configuration list for PBXProject "qui" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AE3103BA2DCBCC9300A36CDE /* Debug */,
@@ -511,7 +513,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AE3103BC2DCBCC9300A36CDE /* Build configuration list for PBXNativeTarget "Mission Rock Events" */ = {
+		AE3103BC2DCBCC9300A36CDE /* Build configuration list for PBXNativeTarget "qui" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AE3103BD2DCBCC9300A36CDE /* Debug */,
@@ -520,7 +522,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AED6B4552DCD00B200FB6EB2 /* Build configuration list for PBXNativeTarget "Mission Rock Events Widget ExtensionExtension" */ = {
+		AED6B4552DCD00B200FB6EB2 /* Build configuration list for PBXNativeTarget "qui widget extension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AED6B4562DCD00B200FB6EB2 /* Debug */,

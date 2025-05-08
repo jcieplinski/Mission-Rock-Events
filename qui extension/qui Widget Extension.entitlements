@@ -4,7 +4,7 @@
 <dict>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.com.joecieplinski.mission-rock-events</string>
+		<string>group.com.joecieplinski.qui</string>
 	</array>
 </dict>
 </plist>

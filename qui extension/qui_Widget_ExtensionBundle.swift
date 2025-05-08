@@ -12,7 +12,5 @@ import SwiftUI
 struct Mission_Rock_Events_Widget_ExtensionBundle: WidgetBundle {
     var body: some Widget {
         Mission_Rock_Events_Widget_Extension()
-        Mission_Rock_Events_Widget_ExtensionControl()
-        Mission_Rock_Events_Widget_ExtensionLiveActivity()
     }
 }
