@@ -54,12 +54,20 @@
 		AED6B45A2DCD00C900FB6EB2 /* Exceptions for "qui" folder in "qui widget extension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				AppIntents/EventsForDateIntent.swift,
+				AppIntents/QuiShortcutsProvider.swift,
+				AppIntents/TodayEventsIntent.swift,
 				Assets.xcassets,
 				Dongles.swift,
-				EventCard.swift,
-				NoEventCard.swift,
-				NoEventTitle.swift,
-				QuiEvent.swift,
+				Model/EventLocation.swift,
+				Model/EventSource.swift,
+				Model/EventType.swift,
+				Model/QuiEvent.swift,
+				Model/QuiEventEntity.swift,
+				Model/QuiEventQuery.swift,
+				View/EventCard.swift,
+				View/NoEventCard.swift,
+				View/NoEventTitle.swift,
 			);
 			target = AED6B43C2DCD00B100FB6EB2 /* qui widget extension */;
 		};

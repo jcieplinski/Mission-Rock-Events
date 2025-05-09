@@ -178,6 +178,7 @@ struct ContentView: View {
     let eventType = getRandomEventType()
 
     let event = QuiEvent(
+      id: UUID(),
       title: "This is an event with a longer name",
       type: eventType.rawValue,
       location: eventType == .baseball ? EventLocation.oraclePark.title : EventLocation.chaseCenter.title,
