@@ -69,7 +69,7 @@ struct EntryCardWidgetView: View {
     .padding()
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .background(
-      event.eventLocation.backgroundColor.opacity(0.6)
+      event.eventLocation.backgroundColor
     )
   }
 }

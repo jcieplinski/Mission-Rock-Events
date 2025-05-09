@@ -48,7 +48,7 @@ enum EventLocation: String, Codable {
   var textColor: Color {
     switch self {
     case .oraclePark:
-      return .primary
+      return .black
     case .chaseCenter:
       return .white
     case .other:

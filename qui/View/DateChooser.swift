@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DateChooser: View {
-  @Binding var selectedDate: Date?
+  @Binding var selectedDate: Date
   @Binding var showDatePicker: Bool
   
   
@@ -16,19 +16,30 @@ struct DateChooser: View {
     NavigationStack {
       DatePicker(
         "Select Date",
-        selection: Binding(
-          get: { selectedDate ?? Date() },
-          set: { selectedDate = $0 }
-        ),
-        in: Date()...,
+        selection: $selectedDate,
+        in: Calendar.current.startOfDay(for: Date())...,
         displayedComponents: [.date]
       )
       .padding()
+      #if os(watchOS)
+      .datePickerStyle(.automatic)
+      #else
       .datePickerStyle(.graphical)
+      #endif
       .presentationDetents([.medium])
       .navigationTitle("Calendar")
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
+        #if os(watchOS)
+        ToolbarItem(placement: .bottomBar) {
+          Button {
+            selectedDate = Date()
+            showDatePicker = false
+          } label: {
+            Text("Go to Today")
+          }
+        }
+        #else
         ToolbarItem(placement: .topBarLeading) {
           Button {
             selectedDate = Date()
@@ -36,6 +47,7 @@ struct DateChooser: View {
             Text("Go to Today")
           }
         }
+        
         ToolbarItem(placement: .topBarTrailing) {
           Button {
             showDatePicker = false
@@ -46,13 +58,14 @@ struct DateChooser: View {
           }
           .tint(.primary)
         }
+        #endif
       }
     }
   }
 }
 
 #Preview {
-  @Previewable @State var selectedDate: Date?
+  @Previewable @State var selectedDate: Date = Date()
   @Previewable @State var showDatePicker: Bool = false
   
   VStack {

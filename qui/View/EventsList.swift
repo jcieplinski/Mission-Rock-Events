@@ -49,6 +49,7 @@ struct EventsList: View {
           
           Spacer()
           
+#if os(iOS)
           Button {
             createEvent(event: event)
           } label: {
@@ -58,15 +59,17 @@ struct EventsList: View {
               .foregroundStyle(.primary)
           }
           .buttonStyle(.plain)
+#endif
         }
       }
       .scrollBounceBehavior(.basedOnSize)
       .navigationTitle("All Events")
       .navigationBarTitleDisplayMode(.inline)
+#if os(iOS)
       .sheet(isPresented: $showEventEditor, onDismiss: {
         ekEvent = nil
       }, content: {
-        EventEditView(eventStore: eventStore, event: ekEvent)
+        EventEditView(eventStore: eventStore, event: $ekEvent)
       })
       .toolbar {
         ToolbarItem(placement: .topBarTrailing) {
@@ -79,16 +82,16 @@ struct EventsList: View {
           }
         }
       }
+#endif
     }
   }
   
   private func createEvent(event: QuiEvent) {
-    let newEvent = EKEvent(eventStore: eventStore)
-    newEvent.title = event.title
-    newEvent.startDate = event.date
-    newEvent.endDate = Calendar.current.date(byAdding: .hour, value: 2, to: event.date) ?? event.date
-    newEvent.location = event.location
-    ekEvent = newEvent
+    ekEvent = EKEvent(eventStore: eventStore)
+    ekEvent?.title = event.title
+    ekEvent?.startDate = event.date
+    ekEvent?.endDate = Calendar.current.date(byAdding: .hour, value: 2, to: event.date) ?? event.date
+    ekEvent?.location = event.location
     showEventEditor = true
   }
 }
@@ -96,4 +99,9 @@ struct EventsList: View {
 #Preview {
   EventsList()
     .modelContainer(for: QuiEvent.self, inMemory: true)
+}
+
+
+extension EKEvent: @retroactive Identifiable {
+  public var id: String { self.eventIdentifier }
 }

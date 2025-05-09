@@ -13,36 +13,28 @@ struct ContentView: View {
   @Environment(\.modelContext) private var modelContext
   @Query(sort: \QuiEvent.date) private var events: [QuiEvent]
   
-  @State private var selectedDate: Date?
+  @State private var selectedDate: Date = Calendar.current.startOfDay(for: Date())
   @State private var currentEvent: QuiEvent?
   @State private var showDatePicker: Bool = false
   @State private var showEventList: Bool = false
   
   let dateFormatter = DateFormatter()
   
-  var todayEvents: [QuiEvent] {
-    return events.filter { $0.date.isToday() }.sorted { $0.date < $1.date }
-  }
-  
   var navigationTitle: String {
-    if let selectedDate, selectedDate.isToday() {
+    if selectedDate.isToday() {
       return "Today"
     }
     
-    return selectedDate == nil ? "Today" : selectedDate?.formatted(date: .abbreviated, time: .omitted) ?? ""
+    return selectedDate.formatted(date: .abbreviated, time: .omitted)
   }
   
   var eventsForSelectedDate: [QuiEvent] {
-    guard let selectedDate else { return todayEvents }
-    
     return events.filter {
       Calendar.current.startOfDay(for: $0.date) == Calendar.current.startOfDay(for: selectedDate)
     }.sorted { $0.date < $1.date }
   }
-
+  
   var nextEventAfter: QuiEvent? {
-    guard let selectedDate else { return nil }
-    
     return events
       .filter { $0.date > selectedDate }
       .sorted { $0.date < $1.date }
@@ -54,9 +46,9 @@ struct ContentView: View {
       VStack {
         if eventsForSelectedDate.isEmpty {
           NoEventCard(nextEvent: nextEventAfter)
-          .clipShape(RoundedRectangle(cornerRadius: 28))
-          .shadow(radius: 8)
-          .padding(22)
+            .clipShape(RoundedRectangle(cornerRadius: 28))
+            .shadow(radius: 8)
+            .padding(22)
         } else {
           ScrollView(.horizontal) {
             HStack {
@@ -93,16 +85,16 @@ struct ContentView: View {
           
           Rectangle()
             .foregroundStyle(.ultraThinMaterial)
-
-            Rectangle()
-              .foregroundStyle(currentEvent?.eventLocation.backgroundColor ?? Color.noEvent)
-              .opacity(0.3)
+          
+          Rectangle()
+            .foregroundStyle(currentEvent?.eventLocation.backgroundColor ?? Color.noEvent)
+            .opacity(0.3)
         }
         
       )
       .animation(.default, value: currentEvent)
       .toolbar {
-        ToolbarItemGroup(placement: .automatic) {
+        ToolbarItemGroup(placement: .primaryAction) {
           Button {
             showDatePicker.toggle()
           } label: {
@@ -142,7 +134,9 @@ struct ContentView: View {
         }
       }
       .navigationTitle(navigationTitle)
+#if os(iOS)
       .toolbarTitleDisplayMode(.inlineLarge)
+#endif
     }
   }
   
@@ -159,7 +153,7 @@ struct ContentView: View {
   
   private func addFakeEvent() {
     let eventType = getRandomEventType()
-
+    
     let event = QuiEvent(
       id: UUID(),
       title: "This is an event with a longer name",
