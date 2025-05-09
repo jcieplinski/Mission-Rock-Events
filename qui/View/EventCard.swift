@@ -49,8 +49,7 @@ struct EventCard: View {
           HStack {
             Spacer()
             
-            Text(event.date, style: .date)
-            Text(event.time, style: .time)
+            Text(event.date.formatted(date: .abbreviated, time: .shortened))
           }
           .lineLimit(1)
           .minimumScaleFactor(0.4)

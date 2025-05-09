@@ -16,7 +16,6 @@ final class QuiEvent: Codable, Equatable {
     type: String,
     location: String,
     date: Date,
-    time: Date,
     performers: String,
     url: String,
     source: String
@@ -26,7 +25,6 @@ final class QuiEvent: Codable, Equatable {
     self.type = type
     self.location = location
     self.date = date
-    self.time = time
     self.performers = performers
     self.url = url
     self.source = source
@@ -37,7 +35,6 @@ final class QuiEvent: Codable, Equatable {
   var type: String
   var location: String
   var date: Date
-  var time: Date
   var performers: String
   var url: String
   var source: String
@@ -75,11 +72,14 @@ final class QuiEvent: Codable, Equatable {
     title = try container.decode(String.self, forKey: .title)
     type = try container.decode(String.self, forKey: .type)
     location = try container.decode(String.self, forKey: .location)
-    date = try container.decode(Date.self, forKey: .date)
-    time = try container.decode(Date.self, forKey: .time)
     performers = try container.decode(String.self, forKey: .performers)
     url = try container.decode(String.self, forKey: .url)
     source = try container.decode(String.self, forKey: .source)
+    
+    let stringDate = try container.decode(String.self, forKey: .date)
+    let stringTime = try container.decode(String.self, forKey: .time)
+    
+    date = Date.dateStringToDate(dateString: "\(stringDate) \(stringTime)")
   }
   
   func encode(to encoder: Encoder) throws {
@@ -88,11 +88,13 @@ final class QuiEvent: Codable, Equatable {
     try container.encode(title, forKey: .title)
     try container.encode(type, forKey: .type)
     try container.encode(location, forKey: .location)
-    try container.encode(date, forKey: .date)
-    try container.encode(time, forKey: .time)
     try container.encode(performers, forKey: .performers)
     try container.encode(url, forKey: .url)
     try container.encode(source, forKey: .source)
+    
+    let stringDateTime = Date.dateToStringDateStringTime(date: date)
+    try container.encode(stringDateTime.stringDate, forKey: .date)
+    try container.encode(stringDateTime.stringTime, forKey: .time)
   }
   
   static var previewEvent: QuiEvent {
@@ -101,8 +103,7 @@ final class QuiEvent: Codable, Equatable {
       title: "SF Giants vs. Colorado Rockies",
       type: EventType.baseball.rawValue,
       location: EventLocation.oraclePark.title,
-      date: Date(),
-      time: Date.dateStringToDate(dateString: "19:00"),
+      date: Calendar.current.date(bySettingHour: 19, minute: 30, second: 0, of: Date()) ?? Date(),
       performers: "SF Giants",
       url: "https://mlb.com/giants",
       source: "SeatGeek API"
@@ -115,8 +116,7 @@ final class QuiEvent: Codable, Equatable {
       title: "SF Giants vs. Colorado Rockies",
       type: EventType.baseball.rawValue,
       location: EventLocation.oraclePark.title,
-      date: Date(timeIntervalSinceNow: 432000),
-      time: Date.dateStringToDate(dateString: "19:00"),
+      date: Calendar.current.date(bySettingHour: 19, minute: 30, second: 0, of: Date(timeIntervalSinceNow: 432000)) ?? Date(timeIntervalSinceNow: 432000),
       performers: "SF Giants",
       url: "https://mlb.com/giants",
       source: "SeatGeek API"

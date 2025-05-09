@@ -54,8 +54,7 @@ struct EntryCardWidgetView: View {
           HStack {
             Spacer()
             
-            Text(event.date, style: .date)
-            Text(event.time, style: .time)
+            Text(event.date.formatted(date: .abbreviated, time: .shortened))
           }
           .font(.caption)
           .lineLimit(1)

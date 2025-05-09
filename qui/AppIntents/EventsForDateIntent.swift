@@ -45,7 +45,7 @@ struct EventsForDateIntent: AppIntent {
     if let todayEvent = events.filter({ calendar.startOfDay(for: $0.date) == calendar.startOfDay(for: day) }).sorted(by: { $0.date < $1.date }).first {
       return .result(
         value: todayEvent.title,
-        dialog: "\(todayEvent.title) at \(todayEvent.location) at \(todayEvent.time.formatted(date: .omitted, time: .shortened))"
+        dialog: "\(todayEvent.title) at \(todayEvent.location) on \(todayEvent.date.formatted(date: .abbreviated, time: .shortened))"
       )
     }
     

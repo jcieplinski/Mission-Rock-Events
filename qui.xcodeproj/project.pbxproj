@@ -65,6 +65,7 @@
 				Model/QuiEvent.swift,
 				Model/QuiEventEntity.swift,
 				Model/QuiEventQuery.swift,
+				View/DateChooser.swift,
 				View/EventCard.swift,
 				View/NoEventCard.swift,
 				View/NoEventTitle.swift,

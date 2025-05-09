@@ -39,7 +39,7 @@ struct TodayEventsIntent: AppIntent {
     if let todayEvent = events.filter({ $0.date.isToday() }).sorted(by: { $0.date < $1.date }).first {
       return .result(
         value: todayEvent.title,
-        dialog: "\(todayEvent.title) at \(todayEvent.location) at \(todayEvent.time.formatted(date: .omitted, time: .shortened))"
+        dialog: "\(todayEvent.title) at \(todayEvent.location) at \(todayEvent.date.formatted(date: .omitted, time: .shortened))"
       )
     }
     

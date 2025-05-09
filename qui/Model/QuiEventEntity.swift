@@ -17,15 +17,14 @@ struct QuiEventEntity: Identifiable, AppEntity {
     DisplayRepresentation(title: "\(title)")
   }
   
-  var id: UUID
-  var title: String
-  var type: String
-  var location: String
-  var date: Date
-  var time: Date
-  var performers: String
-  var url: String
-  var source: String
+  let id: UUID
+  let title: String
+  let type: String
+  let location: String
+  let date: Date
+  let performers: String
+  let url: String
+  let source: String
   
   internal init(
     id: UUID,
@@ -33,7 +32,6 @@ struct QuiEventEntity: Identifiable, AppEntity {
     type: String,
     location: String,
     date: Date,
-    time: Date,
     performers: String,
     url: String,
     source: String
@@ -43,7 +41,6 @@ struct QuiEventEntity: Identifiable, AppEntity {
     self.type = type
     self.location = location
     self.date = date
-    self.time = time
     self.performers = performers
     self.url = url
     self.source = source
@@ -55,7 +52,6 @@ struct QuiEventEntity: Identifiable, AppEntity {
     self.type = event.type
     self.location = event.location
     self.date = event.date
-    self.time = event.time
     self.performers = event.performers
     self.url = event.url
     self.source = event.source

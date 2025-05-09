@@ -36,10 +36,12 @@ struct NoEventWidgetView: View {
               .fontDesign(.rounded)
               .multilineTextAlignment(.leading)
             
-            HStack {
-              Text(nextEvent.date, style: .date)
-              Text(nextEvent.time, style: .time)
-            }
+            Text(
+              nextEvent.date.formatted(
+                date: .abbreviated,
+                time: .shortened
+              )
+            )
             .fontDesign(.rounded)
             .fontWeight(.bold)
             .multilineTextAlignment(.leading)

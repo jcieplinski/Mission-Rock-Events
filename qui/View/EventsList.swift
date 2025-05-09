@@ -14,6 +14,11 @@ struct EventsList: View {
   @Environment(\.dismiss) private var dismiss
   @Query(sort: \QuiEvent.date) private var events: [QuiEvent]
   
+  @State private var ekEvent: EKEvent?
+  @State private var showEventEditor: Bool = false
+  
+  let eventStore = EKEventStore()
+  
   var body: some View {
     NavigationStack {
       if events.isEmpty {
@@ -36,11 +41,8 @@ struct EventsList: View {
           VStack(alignment: .leading) {
             Text(event.title)
               .font(.headline)
-            HStack {
-              Text(event.date.formatted(date: .abbreviated, time: .omitted))
-              Text(event.time.formatted(date: .omitted, time: .shortened))
-            }
-            .font(.subheadline)
+            Text(event.date.formatted(date: .abbreviated, time: .shortened))
+              .font(.subheadline)
             Text(event.location)
               .font(.caption)
           }
@@ -48,23 +50,7 @@ struct EventsList: View {
           Spacer()
           
           Button {
-            let eventStore = EKEventStore()
-            eventStore.requestWriteOnlyAccessToEvents { granted, error in
-              if granted {
-                let calendarEvent = EKEvent(eventStore: eventStore)
-                calendarEvent.title = event.title
-                calendarEvent.startDate = event.date
-                calendarEvent.endDate = Calendar.current.date(byAdding: .hour, value: 2, to: event.date) ?? event.date
-                calendarEvent.location = event.location
-                calendarEvent.calendar = eventStore.defaultCalendarForNewEvents
-                
-                do {
-                  try eventStore.save(calendarEvent, span: .thisEvent)
-                } catch {
-                  print("Error saving event to calendar: \(error)")
-                }
-              }
-            }
+            createEvent(event: event)
           } label: {
             Image(systemName: "calendar.badge.plus")
               .imageScale(.large)
@@ -77,6 +63,11 @@ struct EventsList: View {
       .scrollBounceBehavior(.basedOnSize)
       .navigationTitle("All Events")
       .navigationBarTitleDisplayMode(.inline)
+      .sheet(isPresented: $showEventEditor, onDismiss: {
+        ekEvent = nil
+      }, content: {
+        EventEditView(eventStore: eventStore, event: ekEvent)
+      })
       .toolbar {
         ToolbarItem(placement: .topBarTrailing) {
           Button {
@@ -89,6 +80,16 @@ struct EventsList: View {
         }
       }
     }
+  }
+  
+  private func createEvent(event: QuiEvent) {
+    let newEvent = EKEvent(eventStore: eventStore)
+    newEvent.title = event.title
+    newEvent.startDate = event.date
+    newEvent.endDate = Calendar.current.date(byAdding: .hour, value: 2, to: event.date) ?? event.date
+    newEvent.location = event.location
+    ekEvent = newEvent
+    showEventEditor = true
   }
 }
 

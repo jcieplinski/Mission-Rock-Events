@@ -24,6 +24,14 @@ struct ContentView: View {
     return events.filter { $0.date.isToday() }.sorted { $0.date < $1.date }
   }
   
+  var navigationTitle: String {
+    if let selectedDate, selectedDate.isToday() {
+      return "Today"
+    }
+    
+    return selectedDate == nil ? "Today" : selectedDate?.formatted(date: .abbreviated, time: .omitted) ?? ""
+  }
+  
   var eventsForSelectedDate: [QuiEvent] {
     guard let selectedDate else { return todayEvents }
     
@@ -78,7 +86,6 @@ struct ContentView: View {
       .onChange(of: selectedDate) {
         currentEvent = eventsForSelectedDate.first
       }
-      .padding(.bottom, 11)
       .background(
         ZStack {
           Image("backdrop")
@@ -102,34 +109,10 @@ struct ContentView: View {
             Label("Calendar", systemImage: "calendar")
           }
           .sheet(isPresented: $showDatePicker) {
-            NavigationStack {
-              DatePicker(
-                "Select Date",
-                selection: Binding(
-                  get: { selectedDate ?? Date() },
-                  set: { selectedDate = $0 }
-                ),
-                in: Date()...,
-                displayedComponents: [.date]
-              )
-              .padding()
-              .datePickerStyle(.graphical)
-              .presentationDetents([.medium])
-              .navigationTitle("Calendar")
-              .navigationBarTitleDisplayMode(.inline)
-              .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                  Button {
-                    showDatePicker = false
-                  } label: {
-                    Label("Done", systemImage: "xmark.circle.fill")
-                      .symbolRenderingMode(.hierarchical)
-                      .foregroundStyle(.primary)
-                  }
-                  .tint(.primary)
-                }
-              }
-            }
+            DateChooser(
+              selectedDate: $selectedDate,
+              showDatePicker: $showDatePicker
+            )
           }
           
           Button {
@@ -158,7 +141,7 @@ struct ContentView: View {
           }
         }
       }
-      .navigationTitle((selectedDate == nil ? "Today" : selectedDate?.formatted(date: .abbreviated, time: .omitted)) ?? "")
+      .navigationTitle(navigationTitle)
       .toolbarTitleDisplayMode(.inlineLarge)
     }
   }
@@ -182,8 +165,7 @@ struct ContentView: View {
       title: "This is an event with a longer name",
       type: eventType.rawValue,
       location: eventType == .baseball ? EventLocation.oraclePark.title : EventLocation.chaseCenter.title,
-      date: Date(),
-      time: Date.dateStringToDate(dateString: "15:00"),
+      date: Calendar.current.date(bySettingHour: 19, minute: 30, second: 0, of: Date()) ?? Date(),
       performers: eventType == .baseball ? "SF Giants" : "GS Warriors",
       url: "https://www.mlb.com/giants",
       source: EventSource.seatgeek.rawValue

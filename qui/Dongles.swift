@@ -26,7 +26,17 @@ extension Date {
   
   static func dateStringToDate(dateString: String) -> Date {
     let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "HH:mm"
+    dateFormatter.dateFormat = "YYYY-MM-dd HH:mm"
     return dateFormatter.date(from: dateString) ?? Date()
+  }
+  
+  static func dateToStringDateStringTime(date: Date) -> (stringDate: String, stringTime: String) {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "YYYY-MM-dd HH:mm"
+    
+    let string = dateFormatter.string(from: date)
+    let split = string.split(separator: " ")
+    
+    return (stringDate: String(split[0]), stringTime: String(split[1]))
   }
 }
