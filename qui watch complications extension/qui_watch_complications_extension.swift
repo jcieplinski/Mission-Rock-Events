@@ -84,6 +84,13 @@ struct qui_watch_complications_extensionEntryView : View {
           AccessoryWidgetBackground()
           Text("\(todayEvents.count)")
         }
+        .widgetLabel {
+          if let first = todayEvents.first {
+            Text(first.title)
+          } else {
+            Text("No qui Events")
+          }
+        }
       case .accessoryRectangular:
         if let first = todayEvents.first {
           HStack(alignment: .center, spacing: 0) {
