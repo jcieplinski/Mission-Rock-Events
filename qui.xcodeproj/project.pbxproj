@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		AE046B362DCE8C8B000DAD3A /* qui watch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = AE046B2C2DCE8C8A000DAD3A /* qui watch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		AE0A427C2DCFF90D0093EE8B /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AED6B43F2DCD00B100FB6EB2 /* WidgetKit.framework */; };
+		AE0A427D2DCFF90D0093EE8B /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AED6B4412DCD00B100FB6EB2 /* SwiftUI.framework */; };
+		AE0A42882DCFF90E0093EE8B /* qui watch complications extensionExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AE0A427B2DCFF90D0093EE8B /* qui watch complications extensionExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		AED6B4402DCD00B100FB6EB2 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AED6B43F2DCD00B100FB6EB2 /* WidgetKit.framework */; };
 		AED6B4422DCD00B100FB6EB2 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AED6B4412DCD00B100FB6EB2 /* SwiftUI.framework */; };
 		AED6B4532DCD00B200FB6EB2 /* qui widget extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = AED6B43D2DCD00B100FB6EB2 /* qui widget extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -20,6 +23,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = AE046B2B2DCE8C8A000DAD3A;
 			remoteInfo = "qui watch Watch App";
+		};
+		AE0A42862DCFF90E0093EE8B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AE3103A72DCBCC9200A36CDE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AE0A427A2DCFF90D0093EE8B;
+			remoteInfo = "qui watch complications extensionExtension";
 		};
 		AED6B4512DCD00B200FB6EB2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -42,6 +52,17 @@
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AE0A428D2DCFF90E0093EE8B /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				AE0A42882DCFF90E0093EE8B /* qui watch complications extensionExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AED6B4582DCD00B200FB6EB2 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -57,6 +78,8 @@
 
 /* Begin PBXFileReference section */
 		AE046B2C2DCE8C8A000DAD3A /* qui watch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "qui watch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AE0A427B2DCFF90D0093EE8B /* qui watch complications extensionExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "qui watch complications extensionExtension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AE0A450B2DCFFC2C0093EE8B /* qui watch complications extensionExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "qui watch complications extensionExtension.entitlements"; sourceTree = "<group>"; };
 		AE3103AF2DCBCC9200A36CDE /* qui.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = qui.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AED6B43D2DCD00B100FB6EB2 /* qui widget extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "qui widget extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AED6B43F2DCD00B100FB6EB2 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -85,6 +108,36 @@
 				View/NoEventCard.swift,
 			);
 			target = AE046B2B2DCE8C8A000DAD3A /* qui watch Watch App */;
+		};
+		AE0A428C2DCFF90E0093EE8B /* Exceptions for "qui watch complications extension" folder in "qui watch complications extensionExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = AE0A427A2DCFF90D0093EE8B /* qui watch complications extensionExtension */;
+		};
+		AE0A45122DCFFC810093EE8B /* Exceptions for "qui" folder in "qui watch complications extensionExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Dongles/Constants.swift,
+				Dongles/Date.swift,
+				Dongles/Logger.swift,
+				Dongles/UserDefaults.swift,
+				Model/EventLocation.swift,
+				Model/EventSource.swift,
+				Model/EventType.swift,
+				Model/QuiEvent.swift,
+				Model/QuiEventEntity.swift,
+				Model/QuiEventQuery.swift,
+			);
+			target = AE0A427A2DCFF90D0093EE8B /* qui watch complications extensionExtension */;
+		};
+		AE0A45182DD000420093EE8B /* Exceptions for "qui watch Watch App" folder in "qui watch complications extensionExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Assets.xcassets,
+			);
+			target = AE0A427A2DCFF90D0093EE8B /* qui watch complications extensionExtension */;
 		};
 		AED6B4542DCD00B200FB6EB2 /* Exceptions for "qui extension" folder in "qui widget extension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -123,7 +176,18 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		AE046B2D2DCE8C8A000DAD3A /* qui watch Watch App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				AE0A45182DD000420093EE8B /* Exceptions for "qui watch Watch App" folder in "qui watch complications extensionExtension" target */,
+			);
 			path = "qui watch Watch App";
+			sourceTree = "<group>";
+		};
+		AE0A427E2DCFF90D0093EE8B /* qui watch complications extension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				AE0A428C2DCFF90E0093EE8B /* Exceptions for "qui watch complications extension" folder in "qui watch complications extensionExtension" target */,
+			);
+			path = "qui watch complications extension";
 			sourceTree = "<group>";
 		};
 		AE3103B12DCBCC9200A36CDE /* qui */ = {
@@ -131,6 +195,7 @@
 			exceptions = (
 				AED6B45A2DCD00C900FB6EB2 /* Exceptions for "qui" folder in "qui widget extension" target */,
 				AE046B422DCE8F87000DAD3A /* Exceptions for "qui" folder in "qui watch Watch App" target */,
+				AE0A45122DCFFC810093EE8B /* Exceptions for "qui" folder in "qui watch complications extensionExtension" target */,
 			);
 			path = qui;
 			sourceTree = "<group>";
@@ -150,6 +215,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AE0A42782DCFF90D0093EE8B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AE0A427D2DCFF90D0093EE8B /* SwiftUI.framework in Frameworks */,
+				AE0A427C2DCFF90D0093EE8B /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -175,9 +249,11 @@
 		AE3103A62DCBCC9200A36CDE = {
 			isa = PBXGroup;
 			children = (
+				AE0A450B2DCFFC2C0093EE8B /* qui watch complications extensionExtension.entitlements */,
 				AE3103B12DCBCC9200A36CDE /* qui */,
 				AED6B4432DCD00B100FB6EB2 /* qui extension */,
 				AE046B2D2DCE8C8A000DAD3A /* qui watch Watch App */,
+				AE0A427E2DCFF90D0093EE8B /* qui watch complications extension */,
 				AED6B43E2DCD00B100FB6EB2 /* Frameworks */,
 				AE3103B02DCBCC9200A36CDE /* Products */,
 			);
@@ -189,6 +265,7 @@
 				AE3103AF2DCBCC9200A36CDE /* qui.app */,
 				AED6B43D2DCD00B100FB6EB2 /* qui widget extension.appex */,
 				AE046B2C2DCE8C8A000DAD3A /* qui watch Watch App.app */,
+				AE0A427B2DCFF90D0093EE8B /* qui watch complications extensionExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -212,10 +289,12 @@
 				AE046B282DCE8C8A000DAD3A /* Sources */,
 				AE046B292DCE8C8A000DAD3A /* Frameworks */,
 				AE046B2A2DCE8C8A000DAD3A /* Resources */,
+				AE0A428D2DCFF90E0093EE8B /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				AE0A42872DCFF90E0093EE8B /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				AE046B2D2DCE8C8A000DAD3A /* qui watch Watch App */,
@@ -226,6 +305,28 @@
 			productName = "qui watch Watch App";
 			productReference = AE046B2C2DCE8C8A000DAD3A /* qui watch Watch App.app */;
 			productType = "com.apple.product-type.application";
+		};
+		AE0A427A2DCFF90D0093EE8B /* qui watch complications extensionExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AE0A42892DCFF90E0093EE8B /* Build configuration list for PBXNativeTarget "qui watch complications extensionExtension" */;
+			buildPhases = (
+				AE0A42772DCFF90D0093EE8B /* Sources */,
+				AE0A42782DCFF90D0093EE8B /* Frameworks */,
+				AE0A42792DCFF90D0093EE8B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				AE0A427E2DCFF90D0093EE8B /* qui watch complications extension */,
+			);
+			name = "qui watch complications extensionExtension";
+			packageProductDependencies = (
+			);
+			productName = "qui watch complications extensionExtension";
+			productReference = AE0A427B2DCFF90D0093EE8B /* qui watch complications extensionExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		AE3103AE2DCBCC9200A36CDE /* qui */ = {
 			isa = PBXNativeTarget;
@@ -288,6 +389,9 @@
 					AE046B2B2DCE8C8A000DAD3A = {
 						CreatedOnToolsVersion = 16.3;
 					};
+					AE0A427A2DCFF90D0093EE8B = {
+						CreatedOnToolsVersion = 16.3;
+					};
 					AE3103AE2DCBCC9200A36CDE = {
 						CreatedOnToolsVersion = 16.3;
 					};
@@ -313,12 +417,20 @@
 				AE3103AE2DCBCC9200A36CDE /* qui */,
 				AED6B43C2DCD00B100FB6EB2 /* qui widget extension */,
 				AE046B2B2DCE8C8A000DAD3A /* qui watch Watch App */,
+				AE0A427A2DCFF90D0093EE8B /* qui watch complications extensionExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		AE046B2A2DCE8C8A000DAD3A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AE0A42792DCFF90D0093EE8B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -349,6 +461,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AE0A42772DCFF90D0093EE8B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AE3103AB2DCBCC9200A36CDE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -370,6 +489,11 @@
 			isa = PBXTargetDependency;
 			target = AE046B2B2DCE8C8A000DAD3A /* qui watch Watch App */;
 			targetProxy = AE046B342DCE8C8B000DAD3A /* PBXContainerItemProxy */;
+		};
+		AE0A42872DCFF90E0093EE8B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AE0A427A2DCFF90D0093EE8B /* qui watch complications extensionExtension */;
+			targetProxy = AE0A42862DCFF90E0093EE8B /* PBXContainerItemProxy */;
 		};
 		AED6B4522DCD00B200FB6EB2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -429,6 +553,68 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.joecieplinski.qui.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.4;
+			};
+			name = Release;
+		};
+		AE0A428A2DCFF90E0093EE8B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "qui watch complications extensionExtension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T2N6RA2S89;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "qui watch complications extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "qui watch complications extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.joecieplinski.qui.watchkitapp.qui-watch-complications-extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.4;
+			};
+			name = Debug;
+		};
+		AE0A428B2DCFF90E0093EE8B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "qui watch complications extensionExtension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T2N6RA2S89;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "qui watch complications extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "qui watch complications extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.joecieplinski.qui.watchkitapp.qui-watch-complications-extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -686,6 +872,15 @@
 			buildConfigurations = (
 				AE046B382DCE8C8B000DAD3A /* Debug */,
 				AE046B392DCE8C8B000DAD3A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AE0A42892DCFF90E0093EE8B /* Build configuration list for PBXNativeTarget "qui watch complications extensionExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AE0A428A2DCFF90E0093EE8B /* Debug */,
+				AE0A428B2DCFF90E0093EE8B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

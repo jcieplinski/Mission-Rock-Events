@@ -1,5 +1,5 @@
 //
-//  Mission_Rock_Events_Widget_Extension.swift
+//  Qui_Widget_Extension.swift
 //  Mission Rock Events Widget Extension
 //
 //  Created by Joe Cieplinski on 5/8/25.
@@ -96,7 +96,7 @@ struct Qui_Widget_ExtensionEntryView : View {
   }
 }
 
-struct Mission_Rock_Events_Widget_Extension: Widget {
+struct Qui_Widget_Extension: Widget {
   let kind: String = "Mission_Rock_Events_Widget_Extension"
   
   var body: some WidgetConfiguration {
@@ -130,20 +130,20 @@ extension ConfigurationAppIntent {
 }
 
 #Preview(as: .systemSmall) {
-  Mission_Rock_Events_Widget_Extension()
+  Qui_Widget_Extension()
 } timeline: {
   SimpleEntry(date: .now, configuration: .smiley)
   SimpleEntry(date: .now, configuration: .starEyes)
 }
 
 #Preview(as: .accessoryInline) {
-  Mission_Rock_Events_Widget_Extension()
+  Qui_Widget_Extension()
 } timeline: {
   SimpleEntry(date: .now, configuration: .smiley)
 }
 
 #Preview(as: .accessoryCircular) {
-  Mission_Rock_Events_Widget_Extension()
+  Qui_Widget_Extension()
 } timeline: {
   SimpleEntry(date: .now, configuration: .smiley)
 }
