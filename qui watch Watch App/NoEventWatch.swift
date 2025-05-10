@@ -11,6 +11,8 @@ import SwiftUI
 struct NoEventWatch: View {
   let nextEvent: QuiEvent?
   
+  @Binding var selectedDate: Date
+  
   @State private var noEventTitle: String = ""
   @State private var noEventSubtitle: String = ""
   
@@ -18,7 +20,7 @@ struct NoEventWatch: View {
     VStack() {
       HStack {
         Text("No Events Today")
-          .font(.title3)
+          .font(.title2)
           .fontDesign(.rounded)
           .minimumScaleFactor(0.6)
           .fontWeight(.bold)
@@ -26,8 +28,6 @@ struct NoEventWatch: View {
         
         Spacer()
       }
-      
-      Spacer()
       
       if let nextEvent {
         HStack {
@@ -37,23 +37,27 @@ struct NoEventWatch: View {
               .fontDesign(.rounded)
               .multilineTextAlignment(.leading)
             
-            Text(
-              nextEvent.date.formatted(
-                date: .abbreviated,
-                time: .shortened
+            Button {
+              selectedDate = nextEvent.date
+            } label: {
+              Text(
+                nextEvent.date.formatted(
+                  date: .abbreviated,
+                  time: .shortened
+                )
               )
-            )
-            .fontDesign(.rounded)
-            .fontWeight(.bold)
-            .multilineTextAlignment(.leading)
-            .foregroundStyle(nextEvent.eventLocation.textColor)
+              .fontDesign(.rounded)
+              .fontWeight(.bold)
+              .multilineTextAlignment(.leading)
+            }
+            .buttonStyle(.plain)
           }
           
           Spacer()
         }
-        
-        Spacer()
       }
+      
+      Spacer(minLength: 1)
       
       HStack {
         Spacer()

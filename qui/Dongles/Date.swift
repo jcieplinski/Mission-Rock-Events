@@ -24,10 +24,18 @@ extension Date {
     return Calendar.current.date(byAdding: .day, value: -1, to: Date())
   }
   
-  static func dateStringToDate(dateString: String) -> Date {
+  static func dateStringToDate(dateString: String, timeString: String) -> (date: Date, timeTBD: Bool) {
+    var timeTBD: Bool = false
     let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "YYYY-MM-dd HH:mm"
-    return dateFormatter.date(from: dateString) ?? Date()
+    
+    if !timeString.contains(":") {
+      timeTBD = true
+      dateFormatter.dateFormat = "YYYY-MM-dd"
+      return (date: dateFormatter.date(from: dateString) ?? Date(), timeTBD: timeTBD)
+    } else {
+      dateFormatter.dateFormat = "YYYY-MM-dd HH:mm"
+      return (date: dateFormatter.date(from: "\(dateString) \(timeString)") ?? Date(), timeTBD: timeTBD)
+    }
   }
   
   static func dateToStringDateStringTime(date: Date) -> (stringDate: String, stringTime: String) {

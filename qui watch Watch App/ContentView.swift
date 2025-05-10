@@ -45,7 +45,10 @@ struct ContentView: View {
     NavigationStack {
       VStack {
         if eventsForSelectedDate.isEmpty {
-          NoEventWatch(nextEvent: nextEventAfter)
+          NoEventWatch(
+            nextEvent: nextEventAfter,
+            selectedDate: $selectedDate
+          )
         } else {
           TabView(selection: $currentEvent) {
             ForEach(eventsForSelectedDate) { event in
@@ -117,21 +120,21 @@ struct ContentView: View {
           }
         }
         
-        ToolbarItemGroup(placement: .bottomBar) {
-          Button {
-            deleteAllEvents()
-          } label: {
-            Label("Delete Fake Events", systemImage: "trash")
-          }
-          
-          Spacer()
-          
-          Button {
-            addFakeEvent()
-          } label: {
-            Label("Add Fake Event", systemImage: "plus")
-          }
-        }
+//        ToolbarItemGroup(placement: .bottomBar) {
+//          Button {
+//            deleteAllEvents()
+//          } label: {
+//            Label("Delete Fake Events", systemImage: "trash")
+//          }
+//          
+//          Spacer()
+//          
+//          Button {
+//            addFakeEvent()
+//          } label: {
+//            Label("Add Fake Event", systemImage: "plus")
+//          }
+//        }
       }
       .navigationTitle(navigationTitle)
 #if os(iOS)
@@ -160,6 +163,7 @@ struct ContentView: View {
       type: eventType.rawValue,
       location: eventType == .baseball ? EventLocation.oraclePark.title : EventLocation.chaseCenter.title,
       date: Calendar.current.date(bySettingHour: 19, minute: 30, second: 0, of: Date()) ?? Date(),
+      timeTBD: false,
       performers: eventType == .baseball ? "SF Giants" : "GS Warriors",
       url: "https://www.mlb.com/giants",
       source: EventSource.seatgeek.rawValue

@@ -10,6 +10,8 @@ import SwiftUI
 struct NoEventCard: View {
   let nextEvent: QuiEvent?
   
+  @Binding var selectedDate: Date
+  
   @State private var noEventTitle: String = ""
   @State private var noEventSubtitle: String = ""
   
@@ -25,8 +27,6 @@ struct NoEventCard: View {
         Spacer()
       }
       
-      Spacer()
-      
       if let nextEvent {
         HStack {
           VStack(alignment: .leading) {
@@ -35,27 +35,33 @@ struct NoEventCard: View {
               .fontDesign(.rounded)
               .multilineTextAlignment(.leading)
             
-            Text(
-              nextEvent.date.formatted(
-                date: .abbreviated,
-                time: .shortened
-              )
-            )
-            .fontDesign(.rounded)
-            .fontWeight(.bold)
-            .multilineTextAlignment(.leading)
-            .foregroundStyle(nextEvent.eventLocation.textColor)
-            
-            Text(nextEvent.title)
-              .fontDesign(.rounded)
-              .multilineTextAlignment(.leading)
+            Button {
+              selectedDate = nextEvent.date
+            } label: {
+              VStack(alignment: .leading) {
+                Text(
+                  nextEvent.date.formatted(
+                    date: .abbreviated,
+                    time: .shortened
+                  )
+                )
+                .fontDesign(.rounded)
+                .fontWeight(.bold)
+                .multilineTextAlignment(.leading)
+                
+                Text(nextEvent.title)
+                  .fontDesign(.rounded)
+                  .multilineTextAlignment(.leading)
+              }
+            }
+            .buttonStyle(.plain)
           }
           
           Spacer()
         }
-        
-        Spacer()
       }
+      
+      Spacer()
       
       HStack {
         Spacer()
@@ -86,8 +92,10 @@ struct NoEventCard: View {
 }
 
 #Preview {
+  @Previewable @State var selectedDate: Date = Date()
+  
   VStack {
-    NoEventCard(nextEvent: QuiEvent.previewNextEvent)
+    NoEventCard(nextEvent: QuiEvent.previewNextEvent, selectedDate: $selectedDate)
       .clipShape(RoundedRectangle(cornerRadius: 28))
       .shadow(radius: 8)
       .padding(22)

@@ -46,13 +46,3 @@ struct TodayEventsIntent: AppIntent {
     return .result(value: "No Events Today", dialog: "No Events Today")
   }
 }
-
-@ModelActor
-actor QuiEventHandler {
-  public func fetch() throws -> [QuiEventEntity] {
-    let descriptor = FetchDescriptor<QuiEvent>()
-    let fetchedEvents = try modelContext.fetch(descriptor).sorted{ $0.date < $1.date }
-    
-    return fetchedEvents.map(QuiEventEntity.init)
-  }
-}

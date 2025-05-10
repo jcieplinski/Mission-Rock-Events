@@ -14,7 +14,7 @@ struct EventCardWatch: View {
     VStack(spacing: 4) {
       HStack {
         Text(event.title)
-          .font(.title3)
+          .font(.title2)
           .fontWeight(.bold)
           .fontDesign(.rounded)
           .multilineTextAlignment(.leading)
@@ -22,19 +22,16 @@ struct EventCardWatch: View {
         
         Spacer()
       }
-      
-      Spacer()
-      
-      Image(event.eventType.image)
-        .resizable()
-        .aspectRatio(contentMode: .fit)
-        .frame(maxWidth: 100, maxHeight: 100)
-        .shadow(radius: 0.4)
-      
-      Spacer()
+
+      Spacer(minLength: 1)
       
       HStack {
-        Spacer()
+        Image(event.eventType.image)
+          .resizable()
+          .aspectRatio(contentMode: .fit)
+          .frame(width: 60, height: 60)
+        
+        Spacer(minLength: 6)
         
         VStack {
           HStack {
@@ -50,7 +47,7 @@ struct EventCardWatch: View {
             
             Text(event.date.formatted(date: .abbreviated, time: .shortened))
           }
-          .lineLimit(1)
+          .lineLimit(2)
           .minimumScaleFactor(0.4)
           .fontDesign(.rounded)
           .multilineTextAlignment(.trailing)

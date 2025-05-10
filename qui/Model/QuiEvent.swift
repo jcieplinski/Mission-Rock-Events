@@ -16,8 +16,9 @@ final class QuiEvent: Codable, Equatable {
     type: String,
     location: String,
     date: Date,
-    performers: String,
-    url: String,
+    timeTBD: Bool,
+    performers: String?,
+    url: String?,
     source: String
   ) {
     self.id = id
@@ -25,6 +26,7 @@ final class QuiEvent: Codable, Equatable {
     self.type = type
     self.location = location
     self.date = date
+    self.timeTBD = timeTBD
     self.performers = performers
     self.url = url
     self.source = source
@@ -35,8 +37,9 @@ final class QuiEvent: Codable, Equatable {
   var type: String
   var location: String
   var date: Date
-  var performers: String
-  var url: String
+  var timeTBD: Bool
+  var performers: String?
+  var url: String?
   var source: String
   
   var eventType: EventType {
@@ -72,14 +75,16 @@ final class QuiEvent: Codable, Equatable {
     title = try container.decode(String.self, forKey: .title)
     type = try container.decode(String.self, forKey: .type)
     location = try container.decode(String.self, forKey: .location)
-    performers = try container.decode(String.self, forKey: .performers)
-    url = try container.decode(String.self, forKey: .url)
+    performers = try container.decodeIfPresent(String.self, forKey: .performers)
+    url = try container.decodeIfPresent(String.self, forKey: .url)
     source = try container.decode(String.self, forKey: .source)
     
     let stringDate = try container.decode(String.self, forKey: .date)
     let stringTime = try container.decode(String.self, forKey: .time)
     
-    date = Date.dateStringToDate(dateString: "\(stringDate) \(stringTime)")
+    let dateResult = Date.dateStringToDate(dateString: stringDate, timeString: stringTime)
+    date = dateResult.date
+    timeTBD = dateResult.timeTBD
   }
   
   func encode(to encoder: Encoder) throws {
@@ -88,13 +93,18 @@ final class QuiEvent: Codable, Equatable {
     try container.encode(title, forKey: .title)
     try container.encode(type, forKey: .type)
     try container.encode(location, forKey: .location)
-    try container.encode(performers, forKey: .performers)
-    try container.encode(url, forKey: .url)
+    try container.encodeIfPresent(performers, forKey: .performers)
+    try container.encodeIfPresent(url, forKey: .url)
     try container.encode(source, forKey: .source)
     
     let stringDateTime = Date.dateToStringDateStringTime(date: date)
     try container.encode(stringDateTime.stringDate, forKey: .date)
-    try container.encode(stringDateTime.stringTime, forKey: .time)
+    
+    if timeTBD {
+      try container.encode("TBD", forKey: .time)
+    } else {
+      try container.encode(stringDateTime.stringTime, forKey: .time)
+    }
   }
   
   static var previewEvent: QuiEvent {
@@ -104,6 +114,7 @@ final class QuiEvent: Codable, Equatable {
       type: EventType.baseball.rawValue,
       location: EventLocation.oraclePark.title,
       date: Calendar.current.date(bySettingHour: 19, minute: 30, second: 0, of: Date()) ?? Date(),
+      timeTBD: false,
       performers: "SF Giants",
       url: "https://mlb.com/giants",
       source: "SeatGeek API"
@@ -117,6 +128,7 @@ final class QuiEvent: Codable, Equatable {
       type: EventType.baseball.rawValue,
       location: EventLocation.oraclePark.title,
       date: Calendar.current.date(bySettingHour: 19, minute: 30, second: 0, of: Date(timeIntervalSinceNow: 432000)) ?? Date(timeIntervalSinceNow: 432000),
+      timeTBD: false,
       performers: "SF Giants",
       url: "https://mlb.com/giants",
       source: "SeatGeek API"

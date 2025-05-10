@@ -67,7 +67,11 @@
 		AE046B422DCE8F87000DAD3A /* Exceptions for "qui" folder in "qui watch Watch App" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Dongles.swift,
+				Actors/QuiEventHandler.swift,
+				Dongles/Constants.swift,
+				Dongles/Date.swift,
+				Dongles/Logger.swift,
+				Dongles/UserDefaults.swift,
 				Model/EventLocation.swift,
 				Model/EventSource.swift,
 				Model/EventType.swift,
@@ -92,11 +96,15 @@
 		AED6B45A2DCD00C900FB6EB2 /* Exceptions for "qui" folder in "qui widget extension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Actors/QuiEventHandler.swift,
 				AppIntents/EventsForDateIntent.swift,
 				AppIntents/QuiShortcutsProvider.swift,
 				AppIntents/TodayEventsIntent.swift,
 				Assets.xcassets,
-				Dongles.swift,
+				Dongles/Constants.swift,
+				Dongles/Date.swift,
+				Dongles/Logger.swift,
+				Dongles/UserDefaults.swift,
 				Model/EventLocation.swift,
 				Model/EventSource.swift,
 				Model/EventType.swift,

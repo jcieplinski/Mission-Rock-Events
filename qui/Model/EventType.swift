@@ -13,6 +13,19 @@ enum EventType: String, Codable, CaseIterable {
   case concert
   case other
   
+  init?(rawValue: String) {
+    switch rawValue.lowercased() {
+    case "baseball", "baseball game":
+      self = .baseball
+    case "basketball", "basketball game":
+      self = .basketball
+    case "concert", "special event":
+      self = .concert
+    default:
+      self = .other
+    }
+  }
+  
   var image: String {
     switch self {
     case .baseball:

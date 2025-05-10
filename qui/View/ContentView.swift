@@ -45,7 +45,10 @@ struct ContentView: View {
     NavigationStack {
       VStack {
         if eventsForSelectedDate.isEmpty {
-          NoEventCard(nextEvent: nextEventAfter)
+          NoEventCard(
+            nextEvent: nextEventAfter,
+            selectedDate: $selectedDate
+          )
             .clipShape(RoundedRectangle(cornerRadius: 28))
             .shadow(radius: 8)
             .padding(22)
@@ -93,6 +96,7 @@ struct ContentView: View {
         
       )
       .animation(.default, value: currentEvent)
+      .animation(.default, value: selectedDate)
       .toolbar {
         ToolbarItemGroup(placement: .primaryAction) {
           Button {
@@ -117,21 +121,21 @@ struct ContentView: View {
           }
         }
         
-        ToolbarItemGroup(placement: .bottomBar) {
-          Button {
-            deleteAllEvents()
-          } label: {
-            Label("Delete Fake Events", systemImage: "trash")
-          }
-          
-          Spacer()
-          
-          Button {
-            addFakeEvent()
-          } label: {
-            Label("Add Fake Event", systemImage: "plus")
-          }
-        }
+//        ToolbarItemGroup(placement: .bottomBar) {
+//          Button {
+//            deleteAllEvents()
+//          } label: {
+//            Label("Delete Fake Events", systemImage: "trash")
+//          }
+//          
+//          Spacer()
+//          
+//          Button {
+//            addFakeEvent()
+//          } label: {
+//            Label("Add Fake Event", systemImage: "plus")
+//          }
+//        }
       }
       .navigationTitle(navigationTitle)
 #if os(iOS)
@@ -160,6 +164,7 @@ struct ContentView: View {
       type: eventType.rawValue,
       location: eventType == .baseball ? EventLocation.oraclePark.title : EventLocation.chaseCenter.title,
       date: Calendar.current.date(bySettingHour: 19, minute: 30, second: 0, of: Date()) ?? Date(),
+      timeTBD: false,
       performers: eventType == .baseball ? "SF Giants" : "GS Warriors",
       url: "https://www.mlb.com/giants",
       source: EventSource.seatgeek.rawValue

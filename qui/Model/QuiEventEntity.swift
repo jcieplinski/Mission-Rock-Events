@@ -22,8 +22,8 @@ struct QuiEventEntity: Identifiable, AppEntity {
   let type: String
   let location: String
   let date: Date
-  let performers: String
-  let url: String
+  let performers: String?
+  let url: String?
   let source: String
   
   internal init(
@@ -32,8 +32,8 @@ struct QuiEventEntity: Identifiable, AppEntity {
     type: String,
     location: String,
     date: Date,
-    performers: String,
-    url: String,
+    performers: String?,
+    url: String?,
     source: String
   ) {
     self.id = id
