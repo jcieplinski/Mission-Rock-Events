@@ -6,8 +6,10 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 struct NoEventWidgetView: View {
+  @Environment(\.widgetFamily) var family
   let nextEvent: QuiEvent?
   
   @State private var noEventTitle: String = ""
@@ -26,27 +28,30 @@ struct NoEventWidgetView: View {
         Spacer()
       }
       
-      if let nextEvent {
-        HStack {
-          VStack(alignment: .leading) {
-            Text("Next Event:")
-              .font(.caption2)
-              .fontDesign(.rounded)
-              .multilineTextAlignment(.leading)
-            
-            Text(
-              nextEvent.date.formatted(
-                date: .abbreviated,
-                time: .shortened
+      if family != .systemSmall {
+        if let nextEvent {
+          HStack {
+            VStack(alignment: .leading) {
+              Text("Next Event:")
+                .font(.caption2)
+                .fontDesign(.rounded)
+                .multilineTextAlignment(.leading)
+              
+              Text(
+                nextEvent.date.formatted(
+                  date: .abbreviated,
+                  time: .shortened
+                )
               )
-            )
-            .font(.caption)
-            .fontDesign(.rounded)
-            .fontWeight(.bold)
-            .multilineTextAlignment(.leading)
+              .font(.caption)
+              .fontDesign(.rounded)
+              .fontWeight(.bold)
+              .multilineTextAlignment(.leading)
+            }
+            
+            Spacer()
           }
-          
-          Spacer()
+          .padding(.top, 12)
         }
       }
       
