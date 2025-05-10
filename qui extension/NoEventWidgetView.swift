@@ -26,13 +26,11 @@ struct NoEventWidgetView: View {
         Spacer()
       }
       
-      Spacer()
-      
       if let nextEvent {
         HStack {
           VStack(alignment: .leading) {
             Text("Next Event:")
-              .font(.subheadline)
+              .font(.caption2)
               .fontDesign(.rounded)
               .multilineTextAlignment(.leading)
             
@@ -42,17 +40,17 @@ struct NoEventWidgetView: View {
                 time: .shortened
               )
             )
+            .font(.caption)
             .fontDesign(.rounded)
             .fontWeight(.bold)
             .multilineTextAlignment(.leading)
-            .foregroundStyle(nextEvent.eventLocation.textColor)
           }
           
           Spacer()
         }
-        
-        Spacer()
       }
+      
+      Spacer()
       
       HStack {
         Spacer()

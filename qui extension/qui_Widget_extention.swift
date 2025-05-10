@@ -19,17 +19,9 @@ struct Provider: AppIntentTimelineProvider {
   }
   
   func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<SimpleEntry> {
-    var entries: [SimpleEntry] = []
+    let entry = SimpleEntry(date: Date(), configuration: configuration)
     
-    // Generate a timeline consisting of five entries an hour apart, starting from the current date.
-    let currentDate = Date()
-    for hourOffset in 0 ..< 5 {
-      let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-      let entry = SimpleEntry(date: entryDate, configuration: configuration)
-      entries.append(entry)
-    }
-    
-    return Timeline(entries: entries, policy: .atEnd)
+    return Timeline(entries: [entry], policy: .atEnd)
   }
   
   //    func relevances() async -> WidgetRelevances<ConfigurationAppIntent> {
@@ -42,7 +34,7 @@ struct SimpleEntry: TimelineEntry {
   let configuration: ConfigurationAppIntent
 }
 
-struct Mission_Rock_Events_Widget_ExtensionEntryView : View {
+struct Qui_Widget_ExtensionEntryView : View {
   @Environment(\.widgetFamily) var family
   
   var entry: Provider.Entry
@@ -109,7 +101,7 @@ struct Mission_Rock_Events_Widget_Extension: Widget {
   
   var body: some WidgetConfiguration {
     AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: Provider()) { entry in
-      Mission_Rock_Events_Widget_ExtensionEntryView(entry: entry)
+      Qui_Widget_ExtensionEntryView(entry: entry)
         .containerBackground(.fill.tertiary, for: .widget)
         .modelContainer(for: [QuiEvent.self])
     }
