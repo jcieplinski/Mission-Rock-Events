@@ -29,7 +29,7 @@ final class NoEventTitles {
   static let title20: String = "Battery recharging…"
   static let title21: String = "Taking a rain check"
   static let title22: String = "On vacation mode"
-  static let title23: String = "Temporarily offline"
+  static let title23: String = "Temporarily Eventless"
   static let title24: String = "Nothing scheduled today"
   static let title25: String = "Time for some me-time"
   static let title26: String = "No events in sight"

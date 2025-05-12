@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import WidgetKit
+import EventKitUI
 
 struct ContentView: View {
   @Environment(\.modelContext) private var modelContext
@@ -98,7 +99,7 @@ struct ContentView: View {
       .animation(.default, value: currentEvent)
       .animation(.default, value: selectedDate)
       .toolbar {
-        ToolbarItemGroup(placement: .primaryAction) {
+        ToolbarItemGroup(placement: .bottomBar) {
           Button {
             showDatePicker.toggle()
           } label: {
@@ -109,7 +110,10 @@ struct ContentView: View {
               selectedDate: $selectedDate,
               showDatePicker: $showDatePicker
             )
+            .presentationBackground(.thinMaterial)
           }
+          
+          Spacer()
           
           Button {
             showEventList.toggle()
@@ -118,6 +122,7 @@ struct ContentView: View {
           }
           .sheet(isPresented: $showEventList) {
             EventsList()
+              .presentationBackground(.thinMaterial)
           }
         }
         

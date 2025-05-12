@@ -47,9 +47,9 @@ struct EventsList: View {
               .font(.caption)
           }
           
+#if os(iOS)
           Spacer()
           
-#if os(iOS)
           Button {
             createEvent(event: event)
           } label: {
@@ -61,8 +61,10 @@ struct EventsList: View {
           .buttonStyle(.plain)
 #endif
         }
+        .listRowBackground(Rectangle().foregroundStyle(.ultraThinMaterial))
       }
       .scrollBounceBehavior(.basedOnSize)
+      .scrollContentBackground(.hidden)
       .navigationTitle("All Events")
       .navigationBarTitleDisplayMode(.inline)
 #if os(iOS)

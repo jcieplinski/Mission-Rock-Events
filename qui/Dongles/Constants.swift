@@ -8,7 +8,7 @@
 import Foundation
 
 enum Constants {
-  static let eventsAPIEndpoint = "https://joecieplinski.com//qui/events.json"
+  static let eventsAPIEndpoint = "https://joecieplinski.com/qui/events.json"
   static var appGroup = "group.com.joecieplinski.qui"
 }
 

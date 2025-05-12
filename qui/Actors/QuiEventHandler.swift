@@ -19,44 +19,28 @@ actor QuiEventHandler {
   }
   
   public func updateFromWeb() async throws {
-    // Fetch new events from web API
-    let newEvents = try await fetchEvents()
-    
-    // Get existing events from database
-    let descriptor = FetchDescriptor<QuiEvent>()
-    let existingEvents = try modelContext.fetch(descriptor)
-    
-    // Create sets of IDs for efficient lookup
-    let newEventIds = Set(newEvents.map { $0.id })
-    let existingEventIds = Set(existingEvents.map { $0.id })
-    
-    // Delete events that no longer exist in API response
-    for event in existingEvents {
-      if !newEventIds.contains(event.id) {
+    do {
+      // Fetch new events from web API
+      let newEvents = try await fetchEvents()
+      
+      // Get existing events from database
+      let descriptor = FetchDescriptor<QuiEvent>()
+      let existingEvents = try modelContext.fetch(descriptor)
+      
+      // Delete events that no longer exist in API response
+      for event in existingEvents {
         modelContext.delete(event)
       }
-    }
-    
-    // Update existing or insert new events
-    for newEvent in newEvents {
-      if existingEventIds.contains(newEvent.id) {
-        // Update existing event
-        if let existingEvent = existingEvents.first(where: { $0.id == newEvent.id }) {
-          existingEvent.title = newEvent.title
-          existingEvent.type = newEvent.type
-          existingEvent.location = newEvent.location
-          existingEvent.date = newEvent.date
-          existingEvent.performers = newEvent.performers
-          existingEvent.url = newEvent.url
-          existingEvent.source = newEvent.source
-        }
-      } else {
-        // Insert new event
+      
+      // Update existing or insert new events
+      for newEvent in newEvents {
         modelContext.insert(newEvent)
       }
+      
+      try modelContext.save()
+    } catch {
+      Logger.swiftData.error("Error fetching new events from web API: \(error)")
     }
-    
-    try modelContext.save()
   }
   
   private func fetchEvents() async throws -> [QuiEvent] {
