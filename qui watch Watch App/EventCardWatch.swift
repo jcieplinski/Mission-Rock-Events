@@ -26,11 +26,15 @@ struct EventCardWatch: View {
       Spacer(minLength: 1)
       
       HStack {
-        Image(event.eventType.image)
-          .resizable()
-          .aspectRatio(contentMode: .fit)
-          .frame(width: 60, height: 60)
-        
+        AsyncImage(url: URL(string: event.imageURL ?? "")) { image in
+          image
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 60, height: 60)
+        } placeholder: {
+          ProgressView()
+        }
+
         Spacer(minLength: 6)
         
         VStack {

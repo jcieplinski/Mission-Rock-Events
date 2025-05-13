@@ -16,6 +16,9 @@ struct EventsList: View {
   
   @State private var ekEvent: EKEvent?
   @State private var showEventEditor: Bool = false
+  @State private var searchText: String = ""
+  
+  @Binding var selectedDate: Date
   
   let eventStore = EKEventStore()
   
@@ -32,37 +35,47 @@ struct EventsList: View {
       }
       
       List(events) { event in
-        HStack(spacing: 12) {
-          Image(event.eventType.image)
-            .resizable()
-            .scaledToFit()
-            .frame(width: 40, height: 40)
-          
-          VStack(alignment: .leading) {
-            Text(event.title)
-              .font(.headline)
-            Text(event.date.formatted(date: .abbreviated, time: .shortened))
-              .font(.subheadline)
-            Text(event.location)
-              .font(.caption)
-          }
-          
+        Button {
+          selectedDate = event.date
+          dismiss()
+        } label: {
+          HStack(spacing: 12) {
+            AsyncImage(url: URL(string: event.imageURL ?? "")) { image in
+              image
+                .resizable()
+                .scaledToFit()
+                .frame(width: 40, height: 40)
+            } placeholder: {
+              ProgressView()
+            }
+            
+            VStack(alignment: .leading) {
+              Text(event.title)
+                .font(.headline)
+              Text(event.date.formatted(date: .abbreviated, time: .shortened))
+                .font(.subheadline)
+              Text(event.location)
+                .font(.caption)
+            }
+            
 #if os(iOS)
-          Spacer()
-          
-          Button {
-            createEvent(event: event)
-          } label: {
-            Image(systemName: "calendar.badge.plus")
-              .imageScale(.large)
-              .symbolRenderingMode(.hierarchical)
-              .foregroundStyle(.primary)
-          }
-          .buttonStyle(.plain)
+            Spacer()
+            
+            Button {
+              createEvent(event: event)
+            } label: {
+              Image(systemName: "calendar.badge.plus")
+                .imageScale(.large)
+                .symbolRenderingMode(.hierarchical)
+                .foregroundStyle(.primary)
+            }
+            .buttonStyle(.plain)
 #endif
+          }
         }
         .listRowBackground(Rectangle().foregroundStyle(.ultraThinMaterial))
       }
+      .searchable(text: $searchText, placement: .automatic)
       .scrollBounceBehavior(.basedOnSize)
       .scrollContentBackground(.hidden)
       .navigationTitle("All Events")
@@ -99,11 +112,7 @@ struct EventsList: View {
 }
 
 #Preview {
-  EventsList()
+  @Previewable @State var selectedDate: Date = Date()
+  EventsList(selectedDate: $selectedDate)
     .modelContainer(for: QuiEvent.self, inMemory: true)
-}
-
-
-extension EKEvent: @retroactive Identifiable {
-  public var id: String { self.eventIdentifier }
 }

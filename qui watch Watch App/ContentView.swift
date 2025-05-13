@@ -68,7 +68,7 @@ struct ContentView: View {
         currentEvent = eventsForSelectedDate.first
       }
       .sheet(isPresented: $showEventList) {
-        EventsList()
+        EventsList(selectedDate: $selectedDate)
       }
       .background(
         ZStack {
@@ -152,29 +152,6 @@ struct ContentView: View {
     
     currentEvent = nil
     WidgetCenter.shared.reloadAllTimelines()
-  }
-  
-  private func addFakeEvent() {
-    let eventType = getRandomEventType()
-    
-    let event = QuiEvent(
-      id: UUID(),
-      title: "This is an event with a longer name",
-      type: eventType.rawValue,
-      location: eventType == .baseball ? EventLocation.oraclePark.title : EventLocation.chaseCenter.title,
-      date: Calendar.current.date(bySettingHour: 19, minute: 30, second: 0, of: Date()) ?? Date(),
-      timeTBD: false,
-      performers: eventType == .baseball ? "SF Giants" : "GS Warriors",
-      url: "https://www.mlb.com/giants",
-      source: EventSource.seatgeek.rawValue
-    )
-    
-    modelContext.insert(event)
-    
-    Task {
-      try? await Task.sleep(for: .seconds(1))
-      WidgetCenter.shared.reloadAllTimelines()
-    }
   }
   
   private func getRandomEventType() -> EventType {

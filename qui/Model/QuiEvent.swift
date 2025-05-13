@@ -19,6 +19,7 @@ final class QuiEvent: Codable, Equatable {
     timeTBD: Bool,
     performers: String?,
     url: String?,
+    imageURL: String?,
     source: String
   ) {
     self.id = id
@@ -29,6 +30,7 @@ final class QuiEvent: Codable, Equatable {
     self.timeTBD = timeTBD
     self.performers = performers
     self.url = url
+    self.imageURL = imageURL
     self.source = source
   }
   
@@ -40,6 +42,7 @@ final class QuiEvent: Codable, Equatable {
   var timeTBD: Bool
   var performers: String?
   var url: String?
+  var imageURL: String? = nil
   var source: String
   
   var eventType: EventType {
@@ -65,6 +68,7 @@ final class QuiEvent: Codable, Equatable {
     case time
     case performers
     case url
+    case imageURL = "image_url"
     case source
   }
   
@@ -77,6 +81,7 @@ final class QuiEvent: Codable, Equatable {
     location = try container.decode(String.self, forKey: .location)
     performers = try container.decodeIfPresent(String.self, forKey: .performers)
     url = try container.decodeIfPresent(String.self, forKey: .url)
+    imageURL = try container.decodeIfPresent(String.self, forKey: .imageURL)
     source = try container.decode(String.self, forKey: .source)
     
     let stringDate = try container.decode(String.self, forKey: .date)
@@ -95,6 +100,7 @@ final class QuiEvent: Codable, Equatable {
     try container.encode(location, forKey: .location)
     try container.encodeIfPresent(performers, forKey: .performers)
     try container.encodeIfPresent(url, forKey: .url)
+    try container.encodeIfPresent(imageURL, forKey: .imageURL)
     try container.encode(source, forKey: .source)
     
     let stringDateTime = Date.dateToStringDateStringTime(date: date)
@@ -111,12 +117,13 @@ final class QuiEvent: Codable, Equatable {
     return QuiEvent(
       id: UUID(),
       title: "SF Giants vs. Colorado Rockies",
-      type: EventType.baseball.rawValue,
+      type: EventType.sports.rawValue,
       location: EventLocation.oraclePark.title,
       date: Calendar.current.date(bySettingHour: 19, minute: 30, second: 0, of: Date()) ?? Date(),
       timeTBD: false,
       performers: "SF Giants",
       url: "https://mlb.com/giants",
+      imageURL: "https://seatgeekimages.com/matchup/v3_f9157faa/22/30/huge.jpg",
       source: "SeatGeek API"
     )
   }
@@ -125,12 +132,13 @@ final class QuiEvent: Codable, Equatable {
     return QuiEvent(
       id: UUID(),
       title: "SF Giants vs. Colorado Rockies",
-      type: EventType.baseball.rawValue,
+      type: EventType.sports.rawValue,
       location: EventLocation.oraclePark.title,
       date: Calendar.current.date(bySettingHour: 19, minute: 30, second: 0, of: Date(timeIntervalSinceNow: 432000)) ?? Date(timeIntervalSinceNow: 432000),
       timeTBD: false,
       performers: "SF Giants",
       url: "https://mlb.com/giants",
+      imageURL: "https://seatgeekimages.com/matchup/v3_f9157faa/22/30/huge.jpg",
       source: "SeatGeek API"
     )
   }

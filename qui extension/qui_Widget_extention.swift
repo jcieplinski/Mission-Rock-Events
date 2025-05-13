@@ -8,20 +8,99 @@
 import WidgetKit
 import SwiftUI
 import SwiftData
+import OSLog
 
 struct Provider: AppIntentTimelineProvider {
   func placeholder(in context: Context) -> SimpleEntry {
-    SimpleEntry(date: Date(), configuration: ConfigurationAppIntent())
+    return SimpleEntry(
+      date: Date(),
+      configuration: ConfigurationAppIntent(),
+      todayEvent: nil,
+      todayEventImage: nil
+    )
   }
   
   func snapshot(for configuration: ConfigurationAppIntent, in context: Context) async -> SimpleEntry {
-    SimpleEntry(date: Date(), configuration: configuration)
+    if let entry = await getTodayEntry(for: configuration, in: context) {
+      return entry
+    } else {
+      return SimpleEntry(
+        date: Date(),
+        configuration: ConfigurationAppIntent(),
+        todayEvent: nil,
+        todayEventImage: nil
+      )
+    }
   }
   
   func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<SimpleEntry> {
-    let entry = SimpleEntry(date: Date(), configuration: configuration)
+    if let entry = await getTodayEntry(for: configuration, in: context) {
+      return Timeline(entries: [entry], policy: .atEnd)
+    } else {
+      let entry = SimpleEntry(
+        date: Date(),
+        configuration: ConfigurationAppIntent(),
+        todayEvent: nil,
+        todayEventImage: nil
+      )
+      return Timeline(entries: [entry], policy: .atEnd)
+    }
+  }
+  
+  private func getTodayEntry(for configuration: ConfigurationAppIntent, in context: Context) async -> SimpleEntry? {
+    let sharedModelContainer: ModelContainer = {
+      let schema = Schema([
+        QuiEvent.self,
+      ])
+      
+      let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+      
+      do {
+        return try ModelContainer(for: schema, configurations: [modelConfiguration])
+      } catch {
+        fatalError("Could not create ModelContainer: \(error)")
+      }
+    }()
     
-    return Timeline(entries: [entry], policy: .atEnd)
+    do {
+      let events = try await QuiEventHandler(modelContainer: sharedModelContainer).fetch()
+      
+      if let todayEvent = events.filter({ $0.date.isToday() }).sorted(by: { $0.date < $1.date }).first {
+        if let url = URL(string: todayEvent.imageURL ?? "") {
+          let imageData = try Data(contentsOf: url)
+          let image = UIImage(data: imageData)
+          let entry = SimpleEntry(
+            date: Date(),
+            configuration: configuration,
+            todayEvent: todayEvent,
+            todayEventImage: image
+          )
+          
+          return entry
+        } else {
+          let entry = SimpleEntry(
+            date: Date(),
+            configuration: configuration,
+            todayEvent: todayEvent,
+            todayEventImage: nil
+          )
+          
+          return entry
+        }
+      } else {
+        let entry = SimpleEntry(
+          date: Date(),
+          configuration: configuration,
+          todayEvent: nil,
+          todayEventImage: nil
+        )
+        
+        return entry
+      }
+    } catch {
+      Logger.swiftData.error("Error fetching events: \(error)")
+      return SimpleEntry(date: Date(), configuration: configuration, todayEvent: nil, todayEventImage: nil)
+    }
   }
   
   //    func relevances() async -> WidgetRelevances<ConfigurationAppIntent> {
@@ -32,6 +111,8 @@ struct Provider: AppIntentTimelineProvider {
 struct SimpleEntry: TimelineEntry {
   let date: Date
   let configuration: ConfigurationAppIntent
+  let todayEvent: QuiEventEntity?
+  let todayEventImage: UIImage?
 }
 
 struct Qui_Widget_ExtensionEntryView : View {
@@ -39,10 +120,6 @@ struct Qui_Widget_ExtensionEntryView : View {
   
   var entry: Provider.Entry
   @Query(sort: \QuiEvent.date) private var events: [QuiEvent]
-  
-  var todayEvents: [QuiEvent] {
-    return events.filter { $0.date.isToday() }.sorted { $0.date < $1.date }
-  }
   
   var nextEvent: QuiEvent? {
     return events
@@ -55,26 +132,28 @@ struct Qui_Widget_ExtensionEntryView : View {
     VStack {
       switch family {
       case .systemSmall, .systemLarge, .systemMedium:
-        if let todayEvent = todayEvents.first {
-          EntryCardWidgetView(event: todayEvent)
+        if let todayEvent = entry.todayEvent {
+          EntryCardWidgetView(event: todayEvent, image: entry.todayEventImage)
         } else {
           NoEventWidgetView(nextEvent: nextEvent)
         }
       case .accessoryCircular:
-        if let todayEvent = todayEvents.first {
-          Image(todayEvent.eventType.image)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
+        if let image = entry.todayEventImage {
+            Image(uiImage: image)
+              .resizable()
+              .aspectRatio(contentMode: .fit)
         } else {
           Text("No Events")
             .multilineTextAlignment(.center)
         }
       case .accessoryRectangular:
-        if let todayEvent = todayEvents.first {
+        if let todayEvent = entry.todayEvent {
           HStack {
-            Image(todayEvent.eventType.image)
-              .resizable()
-              .aspectRatio(contentMode: .fit)
+            if let image = entry.todayEventImage {
+              Image(uiImage: image)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+            }
             
             Text(todayEvent.title)
               .lineLimit(2)
@@ -85,7 +164,7 @@ struct Qui_Widget_ExtensionEntryView : View {
             .multilineTextAlignment(.center)
         }
       default:
-        if let todayEvent = todayEvents.first {
+        if let todayEvent = entry.todayEvent {
           Text(todayEvent.title)
         } else {
           Text("No Events Today")
@@ -132,18 +211,18 @@ extension ConfigurationAppIntent {
 #Preview(as: .systemSmall) {
   Qui_Widget_Extension()
 } timeline: {
-  SimpleEntry(date: .now, configuration: .smiley)
-  SimpleEntry(date: .now, configuration: .starEyes)
+  SimpleEntry(date: .now, configuration: .smiley, todayEvent: nil, todayEventImage: nil)
+  SimpleEntry(date: .now, configuration: .starEyes, todayEvent: nil, todayEventImage: nil)
 }
 
 #Preview(as: .accessoryInline) {
   Qui_Widget_Extension()
 } timeline: {
-  SimpleEntry(date: .now, configuration: .smiley)
+  SimpleEntry(date: .now, configuration: .smiley, todayEvent: nil, todayEventImage: nil)
 }
 
 #Preview(as: .accessoryCircular) {
   Qui_Widget_Extension()
 } timeline: {
-  SimpleEntry(date: .now, configuration: .smiley)
+  SimpleEntry(date: .now, configuration: .smiley, todayEvent: nil, todayEventImage: nil)
 }

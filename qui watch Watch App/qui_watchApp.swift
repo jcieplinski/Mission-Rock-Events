@@ -32,9 +32,12 @@ struct qui_watch_Watch_AppApp: App {
       ContentView()
         .onAppear {
           // We only want to fetch new data once per day
+#if DEBUG
+#else
           if let lastFetch, lastFetch.isToday() {
             return
           }
+#endif
           
           Task {
             do {

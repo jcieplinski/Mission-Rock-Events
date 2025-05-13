@@ -23,6 +23,8 @@ actor QuiEventHandler {
       // Fetch new events from web API
       let newEvents = try await fetchEvents()
       
+      Logger.urlSession.info("Fetched \(newEvents.count) new events")
+      
       // Get existing events from database
       let descriptor = FetchDescriptor<QuiEvent>()
       let existingEvents = try modelContext.fetch(descriptor)
@@ -49,7 +51,7 @@ actor QuiEventHandler {
     }
     
     do {
-      let (data, _) = try await URLSession.shared.data(from: url)
+      let (data, _) = try await URLSession(configuration: .ephemeral).data(from: url)
       
       let decoder = JSONDecoder()
       

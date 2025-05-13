@@ -25,11 +25,15 @@ struct EventCard: View {
       
       Spacer()
       
-      Image(event.eventType.image)
-        .resizable()
-        .aspectRatio(contentMode: .fit)
-        .frame(width: 140, height: 140)
-        .shadow(radius: 0.4)
+      AsyncImage(url: URL(string: event.imageURL ?? "")) { image in
+        image
+          .resizable()
+          .aspectRatio(contentMode: .fit)
+          .frame(width: 140, height: 140)
+          .shadow(radius: 0.4)
+      } placeholder: {
+        ProgressView()
+      }
       
       Spacer()
       

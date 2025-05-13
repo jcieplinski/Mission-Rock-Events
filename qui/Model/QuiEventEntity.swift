@@ -24,6 +24,7 @@ struct QuiEventEntity: Identifiable, AppEntity {
   let date: Date
   let performers: String?
   let url: String?
+  let imageURL: String?
   let source: String
   
   internal init(
@@ -34,6 +35,7 @@ struct QuiEventEntity: Identifiable, AppEntity {
     date: Date,
     performers: String?,
     url: String?,
+    imageURL: String?,
     source: String
   ) {
     self.id = id
@@ -43,6 +45,7 @@ struct QuiEventEntity: Identifiable, AppEntity {
     self.date = date
     self.performers = performers
     self.url = url
+    self.imageURL = imageURL
     self.source = source
   }
   
@@ -54,6 +57,11 @@ struct QuiEventEntity: Identifiable, AppEntity {
     self.date = event.date
     self.performers = event.performers
     self.url = event.url
+    self.imageURL = event.imageURL
     self.source = event.source
+  }
+  
+  var eventLocation: EventLocation {
+    return EventLocation(text: location) ?? .other
   }
 }

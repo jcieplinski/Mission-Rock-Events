@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct EntryCardWidgetView: View {
-  let event: QuiEvent
+  let event: QuiEventEntity
+  let image: UIImage?
   
   var body: some View {
     VStack(spacing: 6) {
@@ -28,11 +29,13 @@ struct EntryCardWidgetView: View {
       
       Spacer(minLength: 1)
       
-      Image(event.eventType.image)
-        .resizable()
-        .aspectRatio(contentMode: .fit)
-        .frame(maxWidth: 100, maxHeight: 100)
-        .shadow(radius: 0.4)
+      if let image {
+        Image(uiImage: image)
+          .resizable()
+          .aspectRatio(contentMode: .fit)
+          .frame(maxWidth: 100, maxHeight: 100)
+          .shadow(radius: 0.4)
+      }
       
       Spacer(minLength: 1)
       
@@ -77,7 +80,8 @@ struct EntryCardWidgetView: View {
 #Preview {
   VStack {
     EntryCardWidgetView(
-      event: QuiEvent.previewEvent
+      event: QuiEventEntity(event: QuiEvent.previewEvent),
+      image: nil
     )
     .clipShape(RoundedRectangle(cornerRadius: 28))
   }
