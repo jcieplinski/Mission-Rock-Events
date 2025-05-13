@@ -17,14 +17,27 @@ struct EventsList: View {
   @State private var ekEvent: EKEvent?
   @State private var showEventEditor: Bool = false
   @State private var searchText: String = ""
+  @State private var filteredEvents: [QuiEvent] = []
   
   @Binding var selectedDate: Date
   
   let eventStore = EKEventStore()
   
+  private func updateFilteredEvents() {
+    if searchText.isEmpty {
+      filteredEvents = events
+    } else {
+      filteredEvents = events.filter { event in
+        event.title.localizedCaseInsensitiveContains(searchText) ||
+        event.location.localizedCaseInsensitiveContains(searchText) ||
+        event.type.localizedCaseInsensitiveContains(searchText)
+      }
+    }
+  }
+  
   var body: some View {
     NavigationStack {
-      if events.isEmpty {
+      if filteredEvents.isEmpty {
         VStack {
           Spacer()
           
@@ -34,7 +47,7 @@ struct EventsList: View {
         }
       }
       
-      List(events) { event in
+      List(filteredEvents) { event in
         Button {
           selectedDate = event.date
           dismiss()
@@ -76,6 +89,15 @@ struct EventsList: View {
         .listRowBackground(Rectangle().foregroundStyle(.ultraThinMaterial))
       }
       .searchable(text: $searchText, placement: .automatic)
+      .onChange(of: searchText) { _, _ in
+        updateFilteredEvents()
+      }
+      .onChange(of: events) { _, _ in
+        updateFilteredEvents()
+      }
+      .onAppear {
+        updateFilteredEvents()
+      }
       .scrollBounceBehavior(.basedOnSize)
       .scrollContentBackground(.hidden)
       .navigationTitle("All Events")
