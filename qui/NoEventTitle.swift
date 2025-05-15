@@ -47,6 +47,26 @@ final class NoEventTitles {
   static let title38: String = "Nothing on the agenda"
   static let title39: String = "In hibernation mode"
   static let title40: String = "See you next time!"
+  static let title41: String = "In standby mode"
+  static let title42: String = "Taking a breather"
+  static let title43: String = "Blank canvas today"
+  static let title44: String = "Nothing but possibilities"
+  static let title45: String = "Time for Plan B"
+  static let title46: String = "Momentarily inactive"
+  static let title47: String = "Taking the day off"
+  static let title48: String = "Empty stage syndrome"
+  static let title49: String = "Currently unavailable"
+  static let title50: String = "No shows in sight"
+  static let title51: String = "Enjoying the silence"
+  static let title52: String = "Time to improvise"
+  static let title53: String = "Schedule: wide open"
+  static let title54: String = "Taking a timeout"
+  static let title55: String = "Nothing scheduled"
+  static let title56: String = "Peace and quiet"
+  static let title57: String = "On pause today"
+  static let title58: String = "Empty calendar alert"
+  static let title59: String = "No events detected"
+  static let title60: String = "Time to explore"
   
   static let subtitle1: String = "Go have a picnic or something"
   static let subtitle2: String = "Time to binge that show everyone’s talking about"
@@ -88,9 +108,29 @@ final class NoEventTitles {
   static let subtitle38: String = "Make shadow puppets on the wall"
   static let subtitle39: String = "Create a time capsule for next year"
   static let subtitle40: String = "Perfect your signature dance move"
+  static let subtitle41: String = "Start a collection of interesting rocks"
+  static let subtitle42: String = "Learn to fold origami animals"
+  static let subtitle43: String = "Create a scavenger hunt around your home"
+  static let subtitle44: String = "Practice your best evil laugh"
+  static let subtitle45: String = "Write a letter to your childhood hero"
+  static let subtitle46: String = "Try to break your personal record of toe wiggles"
+  static let subtitle47: String = "Invent a new sandwich combination"
+  static let subtitle48: String = "Learn to say your name backwards"
+  static let subtitle49: String = "Start planning your Halloween costume early"
+  static let subtitle50: String = "Create a new secret handshake"
+  static let subtitle51: String = "Try speaking in rhymes for an hour"
+  static let subtitle52: String = "Make up a new board game"
+  static let subtitle53: String = "Learn to juggle fruit (carefully)"
+  static let subtitle54: String = "Write a song about your pet"
+  static let subtitle55: String = "Practice your superhero landing pose"
+  static let subtitle56: String = "Create your own secret code language"
+  static let subtitle57: String = "Build the world’s tallest house of cards"
+  static let subtitle58: String = "Learn to tie fancy knots"
+  static let subtitle59: String = "Make up new names for colors"
+  static let subtitle60: String = "Start training for your future as a mime"
   
-  static let allTitles: [String] = [title1, title2, title3, title4, title5, title6, title7, title8, title9, title10, title11, title12, title13, title14, title15, title16, title17, title18, title19, title20, title21, title22, title23, title24, title25, title26, title27, title28, title29, title30, title31, title32, title33, title34, title35, title36, title37, title38, title39, title40]
-  static let allSubtitles: [String] = [subtitle1, subtitle2, subtitle3, subtitle4, subtitle5, subtitle6, subtitle7, subtitle8, subtitle9, subtitle10, subtitle11, subtitle12, subtitle13, subtitle14, subtitle15, subtitle16, subtitle17, subtitle18, subtitle19, subtitle20, subtitle21, subtitle22, subtitle23, subtitle24, subtitle25, subtitle26, subtitle27, subtitle28, subtitle29, subtitle30, subtitle31, subtitle32, subtitle33, subtitle34, subtitle35, subtitle36, subtitle37, subtitle38, subtitle39, subtitle40]
+  static let allTitles: [String] = [title1, title2, title3, title4, title5, title6, title7, title8, title9, title10, title11, title12, title13, title14, title15, title16, title17, title18, title19, title20, title21, title22, title23, title24, title25, title26, title27, title28, title29, title30, title31, title32, title33, title34, title35, title36, title37, title38, title39, title40, title41, title42, title43, title44, title45, title46, title47, title48, title49, title50, title51, title52, title53, title54, title55, title56, title57, title58, title59, title60]
+  static let allSubtitles: [String] = [subtitle1, subtitle2, subtitle3, subtitle4, subtitle5, subtitle6, subtitle7, subtitle8, subtitle9, subtitle10, subtitle11, subtitle12, subtitle13, subtitle14, subtitle15, subtitle16, subtitle17, subtitle18, subtitle19, subtitle20, subtitle21, subtitle22, subtitle23, subtitle24, subtitle25, subtitle26, subtitle27, subtitle28, subtitle29, subtitle30, subtitle31, subtitle32, subtitle33, subtitle34, subtitle35, subtitle36, subtitle37, subtitle38, subtitle39, subtitle40, subtitle41, subtitle42, subtitle43, subtitle44, subtitle45, subtitle46, subtitle47, subtitle48, subtitle49, subtitle50, subtitle51, subtitle52, subtitle53, subtitle54, subtitle55, subtitle56, subtitle57, subtitle58, subtitle59, subtitle60]
   
   static func getRandomTitle() -> String {
     return allTitles.randomElement() ?? title1
