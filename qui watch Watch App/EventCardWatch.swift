@@ -18,7 +18,9 @@ struct EventCardWatch: View {
           .fontWeight(.bold)
           .fontDesign(.rounded)
           .multilineTextAlignment(.leading)
+          .minimumScaleFactor(0.6)
           .fixedSize(horizontal: false, vertical: true)
+          .lineLimit(3)
         
         Spacer()
       }

@@ -106,6 +106,7 @@
 				View/DateChooser.swift,
 				View/EventCard.swift,
 				View/EventsList.swift,
+				View/InfoView.swift,
 				View/NoEventCard.swift,
 			);
 			target = AE046B2B2DCE8C8A000DAD3A /* qui watch Watch App */;

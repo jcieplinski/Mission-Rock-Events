@@ -17,6 +17,7 @@ struct ContentView: View {
   @State private var currentEvent: QuiEvent?
   @State private var showDatePicker: Bool = false
   @State private var showEventList: Bool = false
+  @State private var showInfo: Bool = false
   
   let dateFormatter = DateFormatter()
   
@@ -70,6 +71,9 @@ struct ContentView: View {
       .sheet(isPresented: $showEventList) {
         EventsList(selectedDate: $selectedDate)
       }
+      .sheet(isPresented: $showInfo) {
+        InfoView()
+      }
       .background(
         ZStack {
           Image("backdrop")
@@ -117,6 +121,18 @@ struct ContentView: View {
             showEventList.toggle()
           } label: {
             Label("List", systemImage: "list.triangle")
+          }
+        }
+        
+        ToolbarItemGroup(placement: .bottomBar) {
+          HStack {
+            Button {
+              showInfo.toggle()
+            } label: {
+              Image(systemName: "info.circle")
+            }
+            
+            Spacer()
           }
         }
         

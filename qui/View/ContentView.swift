@@ -18,6 +18,7 @@ struct ContentView: View {
   @State private var currentEvent: QuiEvent?
   @State private var showDatePicker: Bool = false
   @State private var showEventList: Bool = false
+  @State private var showInfo: Bool = false
   
   let dateFormatter = DateFormatter()
   
@@ -99,6 +100,14 @@ struct ContentView: View {
       .animation(.default, value: currentEvent)
       .animation(.default, value: selectedDate)
       .toolbar {
+        ToolbarItem(placement: .topBarTrailing) {
+          Button {
+            showInfo.toggle()
+          } label: {
+            Image(systemName: "info.circle")
+          }
+        }
+        
         ToolbarItemGroup(placement: .bottomBar) {
           Button {
             showDatePicker.toggle()
@@ -141,6 +150,10 @@ struct ContentView: View {
 //            Label("Add Fake Event", systemImage: "plus")
 //          }
 //        }
+      }
+      .sheet(isPresented: $showInfo) {
+        InfoView()
+          .presentationBackground(.thinMaterial)
       }
       .navigationTitle(navigationTitle)
 #if os(iOS)

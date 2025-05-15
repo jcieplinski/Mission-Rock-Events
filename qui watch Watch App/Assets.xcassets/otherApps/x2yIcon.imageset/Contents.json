@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "x2yIcon.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
