@@ -22,14 +22,15 @@ actor QuiEventHandler {
     do {
       // Fetch new events from web API
       let newEvents = try await fetchEvents()
+      let newSpecialEvents = try await fetchSpecialEvents()
       
-      Logger.urlSession.info("Fetched \(newEvents.count) new events")
+      Logger.urlSession.info("Fetched \(newEvents.count) events")
+      Logger.urlSession.info("Fetched \(newSpecialEvents.count) special events")
       
       // Get existing events from database
       let descriptor = FetchDescriptor<QuiEvent>()
       let existingEvents = try modelContext.fetch(descriptor)
       
-      // Delete events that no longer exist in API response
       for event in existingEvents {
         modelContext.delete(event)
       }
@@ -37,6 +38,10 @@ actor QuiEventHandler {
       // Update existing or insert new events
       for newEvent in newEvents {
         modelContext.insert(newEvent)
+      }
+      
+      for newSpecialEvent in newSpecialEvents {
+        modelContext.insert(newSpecialEvent)
       }
       
       try modelContext.save()
@@ -47,6 +52,29 @@ actor QuiEventHandler {
   
   private func fetchEvents() async throws -> [QuiEvent] {
     guard let url = URL(string: Constants.eventsAPIEndpoint) else {
+      throw URLError(.badURL)
+    }
+    
+    do {
+      let (data, _) = try await URLSession(configuration: .ephemeral).data(from: url)
+      
+      let decoder = JSONDecoder()
+      
+      do {
+        return try decoder.decode([QuiEvent].self, from: data)
+      } catch {
+        throw URLError(.cannotParseResponse)
+      }
+      
+    } catch let error as URLError {
+      throw error
+    } catch {
+      throw URLError(.unknown)
+    }
+  }
+  
+  func fetchSpecialEvents() async throws -> [QuiEvent] {
+    guard let url = URL(string: Constants.specialEventsAPIEndpoint) else {
       throw URLError(.badURL)
     }
     

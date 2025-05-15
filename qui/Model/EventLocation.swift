@@ -10,6 +10,7 @@ import SwiftUI
 enum EventLocation: String, Codable {
   case oraclePark
   case chaseCenter
+  case ferryBuilding
   case other
   
   init?(text: String) {
@@ -18,6 +19,8 @@ enum EventLocation: String, Codable {
       self = .oraclePark
     case "Chase Center":
       self = .chaseCenter
+    case "Ferry Building":
+      self = .ferryBuilding
     default:
       self = .other
     }
@@ -29,6 +32,8 @@ enum EventLocation: String, Codable {
       return "Oracle Park"
     case .chaseCenter:
       return "Chase Center"
+    case .ferryBuilding:
+      return "Ferry Building"
     case .other:
       return "Other"
     }
@@ -40,6 +45,8 @@ enum EventLocation: String, Codable {
       return .oracleOrange
     case .chaseCenter:
       return .chaseBlue
+    case .ferryBuilding:
+      return .ferryGrey
     case .other:
       return .otherRed
     }
@@ -47,7 +54,7 @@ enum EventLocation: String, Codable {
   
   var textColor: Color {
     switch self {
-    case .oraclePark:
+    case .oraclePark, .ferryBuilding:
       return .black
     case .chaseCenter:
       return .white
