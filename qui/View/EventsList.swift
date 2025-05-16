@@ -60,6 +60,7 @@ struct EventsList: View {
                 .frame(width: 40, height: 40)
             } placeholder: {
               ProgressView()
+                .frame(width: 40, height: 40)
             }
             
             VStack(alignment: .leading) {

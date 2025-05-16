@@ -10,6 +10,13 @@ actor DiskImageCache {
       .appendingPathComponent("ImageCache", isDirectory: true)
   }
   
+  private func cacheKey(for url: URL) -> String {
+    // Use a hash of the full URL to ensure uniqueness
+    let urlString = url.absoluteString
+    let hash = urlString.hash
+    return String(format: "%x", abs(hash))
+  }
+  
   init() {
     // Synchronous initialization for default value
   }
@@ -32,7 +39,7 @@ actor DiskImageCache {
       return
     }
     
-    let fileURL = cacheDirectory.appendingPathComponent(url.lastPathComponent)
+    let fileURL = cacheDirectory.appendingPathComponent(cacheKey(for: url))
     
     do {
       try data.write(to: fileURL)
@@ -43,7 +50,7 @@ actor DiskImageCache {
   }
   
   func loadImage(for url: URL) async -> UIImage? {
-    let fileURL = cacheDirectory.appendingPathComponent(url.lastPathComponent)
+    let fileURL = cacheDirectory.appendingPathComponent(cacheKey(for: url))
     
     guard let data = try? Data(contentsOf: fileURL),
           let image = UIImage(data: data) else {
@@ -56,7 +63,7 @@ actor DiskImageCache {
   }
   
   func removeImage(for url: URL) async {
-    let fileURL = cacheDirectory.appendingPathComponent(url.lastPathComponent)
+    let fileURL = cacheDirectory.appendingPathComponent(cacheKey(for: url))
     
     do {
       try FileManager.default.removeItem(at: fileURL)
@@ -71,10 +78,14 @@ actor DiskImageCache {
       let fileURLs = try FileManager.default.contentsOfDirectory(at: cacheDirectory, includingPropertiesForKeys: nil)
       
       for fileURL in fileURLs {
-        let url = URL(string: fileURL.lastPathComponent)!
-        if !urls.contains(url) {
+        // Since we're using hashes, we need to check if any of the kept URLs match this file
+        let isKept = urls.contains { url in
+          cacheKey(for: url) == fileURL.lastPathComponent
+        }
+        
+        if !isKept {
           try FileManager.default.removeItem(at: fileURL)
-          logger.debug("Cleaned up unused image: \(url)")
+          logger.debug("Cleaned up unused image: \(fileURL.lastPathComponent)")
         }
       }
     } catch {
