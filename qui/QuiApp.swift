@@ -12,6 +12,9 @@ import OSLog
 @main
 struct QuiApp: App {
   @AppStorage(DefaultsKey.lastFetch) private var lastFetch: Date?
+  @State private var imageCache: ImageCache?
+  @State private var defaultCache = ImageCache(diskCache: DiskImageCache())
+  
   var sharedModelContainer: ModelContainer = {
     let schema = Schema([
       QuiEvent.self,
@@ -29,7 +32,16 @@ struct QuiApp: App {
   var body: some Scene {
     WindowGroup {
       ContentView()
-        .environment(ImageCache())
+        .environment(\.imageCache as WritableKeyPath<EnvironmentValues, ImageCache>, imageCache ?? defaultCache)
+        .task {
+          if imageCache == nil {
+            let cache = await ImageCache(diskCache: DiskImageCache())
+            try? await cache.initialize()
+            await MainActor.run {
+              imageCache = cache
+            }
+          }
+        }
         .onAppear {
           // We only want to fetch new data once per day
 #if DEBUG
@@ -41,8 +53,11 @@ struct QuiApp: App {
           
           Task {
             do {
-              try await QuiEventHandler(modelContainer: sharedModelContainer).updateFromWeb()
-              lastFetch = Date()
+              let cache = imageCache ?? defaultCache
+              try await QuiEventHandler(modelContainer: sharedModelContainer).updateFromWeb(imageCache: cache)
+              await MainActor.run {
+                lastFetch = Date()
+              }
             } catch {
               Logger.swiftData.error("Error fetching new stuff: \(error)")
             }

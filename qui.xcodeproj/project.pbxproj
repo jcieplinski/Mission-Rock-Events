@@ -96,6 +96,7 @@
 				Dongles/EKEvent.swift,
 				Dongles/Logger.swift,
 				Dongles/UserDefaults.swift,
+				Model/DiskImageCache.swift,
 				Model/EventLocation.swift,
 				Model/EventSource.swift,
 				Model/EventType.swift,
@@ -163,6 +164,7 @@
 				Dongles/EKEvent.swift,
 				Dongles/Logger.swift,
 				Dongles/UserDefaults.swift,
+				Model/DiskImageCache.swift,
 				Model/EventLocation.swift,
 				Model/EventSource.swift,
 				Model/EventType.swift,
@@ -534,7 +536,7 @@
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 11.4;
 			};
@@ -565,7 +567,7 @@
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 11.4;
 			};

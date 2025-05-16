@@ -9,9 +9,9 @@ import SwiftData
 import AppIntents
 
 struct QuiEventEntity: Identifiable, AppEntity {
-  static var defaultQuery = QuiEventQuery()
+  static let defaultQuery = QuiEventQuery()
   
-  static var typeDisplayRepresentation: TypeDisplayRepresentation = "Event"
+  static let typeDisplayRepresentation: TypeDisplayRepresentation = "Event"
   
   var displayRepresentation: DisplayRepresentation {
     DisplayRepresentation(title: "\(title)")

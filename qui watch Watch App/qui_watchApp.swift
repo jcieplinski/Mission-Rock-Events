@@ -10,8 +10,9 @@ import SwiftData
 import OSLog
 
 @main
-struct qui_watch_Watch_AppApp: App {
-  @AppStorage(DefaultsKey.lastFetch, store: .appGroup) private var lastFetch: Date?
+struct qui_watchApp: App {
+  @AppStorage(DefaultsKey.lastFetch) private var lastFetch: Date?
+  @State private var imageCache: ImageCache? = ImageCache(diskCache: DiskImageCache())
   
   var sharedModelContainer: ModelContainer = {
     let schema = Schema([
@@ -30,7 +31,11 @@ struct qui_watch_Watch_AppApp: App {
   var body: some Scene {
     WindowGroup {
       ContentView()
-        .environment(ImageCache())
+        .task {
+          if imageCache == nil {
+            imageCache = await ImageCache(diskCache: DiskImageCache())
+          }
+        }
         .onAppear {
           // We only want to fetch new data once per day
 #if DEBUG
@@ -42,7 +47,7 @@ struct qui_watch_Watch_AppApp: App {
           
           Task {
             do {
-              try await QuiEventHandler(modelContainer: sharedModelContainer).updateFromWeb()
+              try await QuiEventHandler(modelContainer: sharedModelContainer).updateFromWeb(imageCache: imageCache!)
               lastFetch = Date()
             } catch {
               Logger.swiftData.error("Error fetching new stuff: \(error)")
@@ -51,5 +56,6 @@ struct qui_watch_Watch_AppApp: App {
         }
     }
     .modelContainer(sharedModelContainer)
+    .environment(\.imageCache, imageCache ?? ImageCache(diskCache: DiskImageCache()))
   }
 }

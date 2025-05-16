@@ -11,6 +11,7 @@ import OSLog
 
 @ModelActor
 actor QuiEventHandler {
+  
   public func fetch() throws -> [QuiEventEntity] {
     let descriptor = FetchDescriptor<QuiEvent>()
     let fetchedEvents = try modelContext.fetch(descriptor).sorted{ $0.date < $1.date }
@@ -18,7 +19,7 @@ actor QuiEventHandler {
     return fetchedEvents.map(QuiEventEntity.init)
   }
   
-  public func updateFromWeb() async throws {
+  public func updateFromWeb(imageCache: ImageCache) async throws {
     do {
       // Fetch new events from web API
       let newEvents = try await fetchEvents()
@@ -31,11 +32,23 @@ actor QuiEventHandler {
       let descriptor = FetchDescriptor<QuiEvent>()
       let existingEvents = try modelContext.fetch(descriptor)
       
+      // Collect URLs of images we want to keep
+      var imageURLsToKeep = Set<URL>()
+      for event in newEvents + newSpecialEvents {
+        if let imageURLString = event.imageURL,
+           let imageURL = URL(string: imageURLString) {
+          imageURLsToKeep.insert(imageURL)
+        }
+      }
+      
+      // Clean up image cache
+      await imageCache.cleanup(keeping: imageURLsToKeep)
+      
+      // Update database
       for event in existingEvents {
         modelContext.delete(event)
       }
       
-      // Update existing or insert new events
       for newEvent in newEvents {
         modelContext.insert(newEvent)
       }
