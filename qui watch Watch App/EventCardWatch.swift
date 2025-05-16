@@ -14,13 +14,15 @@ struct EventCardWatch: View {
     VStack(spacing: 4) {
       HStack {
         Text(event.title)
-          .font(.title2)
+          .font(.title)
           .fontWeight(.bold)
           .fontDesign(.rounded)
           .multilineTextAlignment(.leading)
-          .minimumScaleFactor(0.6)
-          .fixedSize(horizontal: false, vertical: true)
+          .allowsTightening(true)
+          .minimumScaleFactor(0.3)
+       //   .fixedSize(horizontal: false, vertical: true)
           .lineLimit(3)
+          .lineSpacing(0.5)
         
         Spacer()
       }
@@ -32,7 +34,7 @@ struct EventCardWatch: View {
           image
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .frame(width: 60, height: 60)
+            .frame(maxWidth: 60, maxHeight: 60)
         } placeholder: {
           ProgressView()
         }

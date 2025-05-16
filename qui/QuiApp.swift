@@ -36,7 +36,7 @@ struct QuiApp: App {
         .task {
           if imageCache == nil {
             let cache = await ImageCache(diskCache: DiskImageCache())
-            try? await cache.initialize()
+            await cache.initialize()
             await MainActor.run {
               imageCache = cache
             }

@@ -65,6 +65,7 @@ struct ContentView: View {
           .tabViewStyle(.page)
         }
       }
+      .ignoresSafeArea([])
       .onChange(of: selectedDate) {
         currentEvent = eventsForSelectedDate.first
       }
@@ -79,9 +80,9 @@ struct ContentView: View {
           Image("backdrop")
             .resizable()
             .aspectRatio(contentMode: .fill)
-            .ignoresSafeArea()
             .opacity(0.4)
             .saturation(0)
+            .ignoresSafeArea()
           
           Rectangle()
             .foregroundStyle(.thinMaterial)
@@ -95,10 +96,9 @@ struct ContentView: View {
             startPoint: .top,
             endPoint: .bottom
           )
+          .ignoresSafeArea()
           .opacity(0.4)
-          .ignoresSafeArea()
         }
-          .ignoresSafeArea()
       )
       .animation(.default, value: currentEvent)
       .toolbar {
