@@ -26,7 +26,9 @@ struct DateChooser: View {
       #else
       .datePickerStyle(.graphical)
       #endif
-      .presentationDetents([.medium])
+      #if os(iOS)
+      .presentationDetents(UIDevice.current.userInterfaceIdiom == .pad ? [.large] : [.medium])
+      #endif
       .navigationTitle("Calendar")
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
