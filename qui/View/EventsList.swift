@@ -53,7 +53,7 @@ struct EventsList: View {
           dismiss()
         } label: {
           HStack(spacing: 12) {
-            AsyncImage(url: URL(string: event.imageURL ?? "")) { image in
+            CachedAsyncImage(url: URL(string: event.imageURL ?? "")) { image in
               image
                 .resizable()
                 .scaledToFit()

@@ -25,7 +25,7 @@ struct EventCard: View {
       
       Spacer()
       
-      AsyncImage(url: URL(string: event.imageURL ?? "")) { image in
+      CachedAsyncImage(url: URL(string: event.imageURL ?? "")) { image in
         image
           .resizable()
           .aspectRatio(contentMode: .fit)

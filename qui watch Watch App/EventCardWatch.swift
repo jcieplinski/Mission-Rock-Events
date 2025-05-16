@@ -28,7 +28,7 @@ struct EventCardWatch: View {
       Spacer(minLength: 1)
       
       HStack {
-        AsyncImage(url: URL(string: event.imageURL ?? "")) { image in
+        CachedAsyncImage(url: URL(string: event.imageURL ?? "")) { image in
           image
             .resizable()
             .aspectRatio(contentMode: .fit)

@@ -29,6 +29,7 @@ struct QuiApp: App {
   var body: some Scene {
     WindowGroup {
       ContentView()
+        .environment(ImageCache())
         .onAppear {
           // We only want to fetch new data once per day
 #if DEBUG
