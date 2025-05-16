@@ -144,7 +144,7 @@ struct InfoView: View {
       .navigationTitle("About")
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
-#if os(ios)
+#if os(iOS)
         ToolbarItem(placement: .topBarTrailing) {
           Button("Done") {
             dismiss()
