@@ -522,7 +522,7 @@
 				DEVELOPMENT_TEAM = T2N6RA2S89;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "qui watch";
+				INFOPLIST_KEY_CFBundleDisplayName = qui;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.joecieplinski.qui;
@@ -553,7 +553,7 @@
 				DEVELOPMENT_TEAM = T2N6RA2S89;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "qui watch";
+				INFOPLIST_KEY_CFBundleDisplayName = qui;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.joecieplinski.qui;
@@ -584,7 +584,7 @@
 				DEVELOPMENT_TEAM = T2N6RA2S89;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "qui watch complications extension/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "qui watch complications extension";
+				INFOPLIST_KEY_CFBundleDisplayName = qui;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -615,7 +615,7 @@
 				DEVELOPMENT_TEAM = T2N6RA2S89;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "qui watch complications extension/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "qui watch complications extension";
+				INFOPLIST_KEY_CFBundleDisplayName = qui;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

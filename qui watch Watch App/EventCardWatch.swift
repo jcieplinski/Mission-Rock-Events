@@ -20,7 +20,6 @@ struct EventCardWatch: View {
           .multilineTextAlignment(.leading)
           .allowsTightening(true)
           .minimumScaleFactor(0.3)
-       //   .fixedSize(horizontal: false, vertical: true)
           .lineLimit(3)
           .lineSpacing(0.5)
         
