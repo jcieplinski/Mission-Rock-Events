@@ -29,7 +29,7 @@ struct EventCard: View {
         image
           .resizable()
           .aspectRatio(contentMode: .fit)
-          .frame(width: 140, height: 140)
+          .frame(maxWidth: 220, maxHeight: 220)
           .shadow(radius: 0.4)
       } placeholder: {
         ProgressView()
