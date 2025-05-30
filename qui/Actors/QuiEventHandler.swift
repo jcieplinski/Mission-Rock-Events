@@ -32,9 +32,14 @@ actor QuiEventHandler {
       let descriptor = FetchDescriptor<QuiEvent>()
       let existingEvents = try modelContext.fetch(descriptor)
       
+      // Keep track of today's events
+      let calendar = Calendar.current
+      let today = calendar.startOfDay(for: Date())
+      let todaysEvents = existingEvents.filter { calendar.startOfDay(for: $0.date) == today }
+      
       // Collect URLs of images we want to keep
       var imageURLsToKeep = Set<URL>()
-      for event in newEvents + newSpecialEvents {
+      for event in newEvents + newSpecialEvents + todaysEvents {
         if let imageURLString = event.imageURL,
            let imageURL = URL(string: imageURLString) {
           imageURLsToKeep.insert(imageURL)
@@ -44,17 +49,26 @@ actor QuiEventHandler {
       // Clean up image cache
       await imageCache.cleanup(keeping: imageURLsToKeep)
       
-      // Update database
+      // Delete all events except today's
       for event in existingEvents {
-        modelContext.delete(event)
+        if !todaysEvents.contains(where: { $0.id == event.id }) {
+          modelContext.delete(event)
+        }
       }
       
+      // Add new events
       for newEvent in newEvents {
-        modelContext.insert(newEvent)
+        // Only add if it's not already a today event with the same ID
+        if !todaysEvents.contains(where: { $0.id == newEvent.id }) {
+          modelContext.insert(newEvent)
+        }
       }
       
       for newSpecialEvent in newSpecialEvents {
-        modelContext.insert(newSpecialEvent)
+        // Only add if it's not already a today event with the same ID
+        if !todaysEvents.contains(where: { $0.id == newSpecialEvent.id }) {
+          modelContext.insert(newSpecialEvent)
+        }
       }
       
       try modelContext.save()
@@ -97,7 +111,14 @@ actor QuiEventHandler {
       let decoder = JSONDecoder()
       
       do {
-        return try decoder.decode([QuiEvent].self, from: data)
+        let allSpecialEvents = try decoder.decode([QuiEvent].self, from: data)
+        
+        // Filter out past events
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        return allSpecialEvents.filter { event in
+          calendar.startOfDay(for: event.date) >= today
+        }
       } catch {
         throw URLError(.cannotParseResponse)
       }
