@@ -12,6 +12,8 @@ import OSLog
 @ModelActor
 actor QuiEventHandler {
   
+  @AppStorage("lastUpdateDate") private var lastUpdateDate: Date = Date.distantPast
+  
   public func fetch() throws -> [QuiEventEntity] {
     let descriptor = FetchDescriptor<QuiEvent>()
     let fetchedEvents = try modelContext.fetch(descriptor).sorted{ $0.date < $1.date }
@@ -27,6 +29,8 @@ actor QuiEventHandler {
       
       Logger.urlSession.info("Fetched \(newEvents.count) events")
       Logger.urlSession.info("Fetched \(newSpecialEvents.count) special events")
+      
+      guard !newEvents.isEmpty else { return }
       
       // Get existing events from database
       let descriptor = FetchDescriptor<QuiEvent>()
@@ -72,6 +76,10 @@ actor QuiEventHandler {
       }
       
       try modelContext.save()
+      
+      // Update the last update date on successful completion
+      lastUpdateDate = Date()
+      
     } catch {
       Logger.swiftData.error("Error fetching new events from web API: \(error)")
     }

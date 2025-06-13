@@ -12,6 +12,7 @@ import EventKitUI
 
 struct ContentView: View {
   @Environment(\.modelContext) private var modelContext
+  @Environment(\.imageCache) private var imageCache
   @Query(sort: \QuiEvent.date) private var events: [QuiEvent]
   
   @State private var selectedDate: Date = Calendar.current.startOfDay(for: Date())
@@ -19,6 +20,8 @@ struct ContentView: View {
   @State private var showDatePicker: Bool = false
   @State private var showEventList: Bool = false
   @State private var showInfo: Bool = false
+  @State private var isRefreshing: Bool = false
+  @AppStorage("lastUpdateDate") private var lastUpdateDate: Date = Date.distantPast
   
   let dateFormatter = DateFormatter()
   
@@ -41,6 +44,13 @@ struct ContentView: View {
       .filter { $0.date > selectedDate }
       .sorted { $0.date < $1.date }
       .first
+  }
+  
+  var lastUpdateText: String {
+    if lastUpdateDate == Date.distantPast {
+      return "Last Updated: Never"
+    }
+    return "Last Updated: \(lastUpdateDate.formatted(date: .abbreviated, time: .omitted))"
   }
   
   var body: some View {
@@ -124,6 +134,27 @@ struct ContentView: View {
           
           Spacer()
           
+          HStack(spacing: 8) {
+            Text(lastUpdateText)
+              .font(.caption)
+              .foregroundStyle(.secondary)
+            
+            if events.isEmpty {
+              Button {
+                Task {
+                  await refreshEvents()
+                }
+              } label: {
+                Image(systemName: "arrow.clockwise")
+                  .font(.caption)
+                  .foregroundStyle(.secondary)
+              }
+              .disabled(isRefreshing)
+            }
+          }
+          
+          Spacer()
+          
           Button {
             showEventList.toggle()
           } label: {
@@ -160,6 +191,20 @@ struct ContentView: View {
       .toolbarTitleDisplayMode(.inlineLarge)
 #endif
     }
+  }
+  
+  private func refreshEvents() async {
+    isRefreshing = true
+    
+    do {
+      let handler = QuiEventHandler(modelContainer: modelContext.container)
+      try await handler.updateFromWeb(imageCache: imageCache)
+    } catch {
+      // Handle error if needed
+      print("Error refreshing events: \(error)")
+    }
+    
+    isRefreshing = false
   }
   
   private func deleteAllEvents() {
