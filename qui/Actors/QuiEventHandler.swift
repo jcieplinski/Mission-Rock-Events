@@ -60,18 +60,19 @@ actor QuiEventHandler {
         }
       }
       
-      // Add new events
-      for newEvent in newEvents {
-        // Only add if it's not already a today event with the same ID
-        if !todaysEvents.contains(where: { $0.id == newEvent.id }) {
-          modelContext.insert(newEvent)
-        }
+      // Combine all new events and remove duplicates based on ID
+      let allNewEvents = newEvents + newSpecialEvents
+      let uniqueNewEvents = Array(Set(allNewEvents.map { $0.id })).compactMap { id in
+        allNewEvents.first { $0.id == id }
       }
       
-      for newSpecialEvent in newSpecialEvents {
-        // Only add if it's not already a today event with the same ID
-        if !todaysEvents.contains(where: { $0.id == newSpecialEvent.id }) {
-          modelContext.insert(newSpecialEvent)
+      // Add new events, checking against both today's events and existing events
+      for newEvent in uniqueNewEvents {
+        let isAlreadyInToday = todaysEvents.contains(where: { $0.id == newEvent.id })
+        let isAlreadyInExisting = existingEvents.contains(where: { $0.id == newEvent.id })
+        
+        if !isAlreadyInToday && !isAlreadyInExisting {
+          modelContext.insert(newEvent)
         }
       }
       
