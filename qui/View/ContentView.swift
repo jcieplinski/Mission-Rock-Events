@@ -22,6 +22,7 @@ struct ContentView: View {
   @State private var showInfo: Bool = false
   @State private var isRefreshing: Bool = false
   @State private var isBackgroundRefreshing: Bool = false
+  @State private var isInitialFetching: Bool = false
   @AppStorage("lastUpdateDate") private var lastUpdateDate: Date = Date.distantPast
   
   let dateFormatter = DateFormatter()
@@ -66,13 +67,25 @@ struct ContentView: View {
     NavigationStack {
       VStack {
         if eventsForSelectedDate.isEmpty {
-          NoEventCard(
-            nextEvent: nextEventAfter,
-            selectedDate: $selectedDate
-          )
-          .clipShape(RoundedRectangle(cornerRadius: 28))
-          .shadow(radius: 8)
-          .padding(22)
+          if isInitialFetching {
+            VStack {
+              ProgressView()
+                .scaleEffect(1.5)
+              Text("Loading events...")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .padding(.top, 8)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+          } else {
+            NoEventCard(
+              nextEvent: nextEventAfter,
+              selectedDate: $selectedDate
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 28))
+            .shadow(radius: 8)
+            .padding(22)
+          }
         } else {
           ScrollView(.horizontal) {
             HStack {
@@ -152,7 +165,7 @@ struct ContentView: View {
           Button {
             showInfo.toggle()
           } label: {
-            Image(systemName: "info")
+            Image(systemName: "ellipsis")
           }
         }
         
@@ -217,6 +230,13 @@ struct ContentView: View {
       let descriptor = FetchDescriptor<QuiEvent>()
       events = try modelContext.fetch(descriptor).sorted { $0.date < $1.date }
       
+      // If no events and this is the first launch, show loading state
+      if events.isEmpty && lastUpdateDate == Date.distantPast {
+        isInitialFetching = true
+        // Start monitoring for updates
+        startMonitoringForUpdates()
+      }
+      
       // Check if we need to refresh events in the background
       let oneHourAgo = Calendar.current.date(byAdding: .hour, value: -1, to: Date()) ?? Date()
       if lastUpdateDate < oneHourAgo {
@@ -239,7 +259,8 @@ struct ContentView: View {
       let handler = QuiEventHandler(modelContainer: modelContext.container)
       try await handler.updateFromWeb(imageCache: imageCache)
       // Reload events after updating
-      await loadEvents()
+      let descriptor = FetchDescriptor<QuiEvent>()
+      events = try modelContext.fetch(descriptor).sorted { $0.date < $1.date }
     } catch {
       // Handle error if needed
       print("Error refreshing events: \(error)")
@@ -262,6 +283,31 @@ struct ContentView: View {
   private func getRandomEventType() -> EventType {
     let randomIndex = Int.random(in: 0..<EventType.allCases.count)
     return EventType.allCases[randomIndex]
+  }
+  
+  private func startMonitoringForUpdates() {
+    // Check for updates every 2 seconds until we have events or timeout
+    Task {
+      var attempts = 0
+      let maxAttempts = 30 // 60 seconds max
+      
+      while events.isEmpty && attempts < maxAttempts && isInitialFetching {
+        try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
+        await MainActor.run {
+          do {
+            let descriptor = FetchDescriptor<QuiEvent>()
+            events = try modelContext.fetch(descriptor).sorted { $0.date < $1.date }
+          } catch {
+            print("Error monitoring for updates: \(error)")
+          }
+        }
+        attempts += 1
+      }
+      
+      await MainActor.run {
+        isInitialFetching = false
+      }
+    }
   }
 }
 

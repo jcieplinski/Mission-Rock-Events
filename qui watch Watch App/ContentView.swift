@@ -21,6 +21,8 @@ struct ContentView: View {
   @State private var showEventList: Bool = false
   @State private var showInfo: Bool = false
   @State private var isBackgroundRefreshing: Bool = false
+  @State private var isLoadingEvents: Bool = false
+  @State private var isInitialFetching: Bool = false
   @AppStorage("lastUpdateDate") private var lastUpdateDate: Date = Date.distantPast
   
   let dateFormatter = DateFormatter()
@@ -47,34 +49,79 @@ struct ContentView: View {
   }
   
   private func loadEvents() {
+    // Prevent multiple simultaneous loads
+    guard !isLoadingEvents else { return }
+    isLoadingEvents = true
+    
     do {
       // Load existing events immediately from database (synchronous)
       let descriptor = FetchDescriptor<QuiEvent>()
-      events = try modelContext.fetch(descriptor).sorted { $0.date < $1.date }
+      let fetchedEvents = try modelContext.fetch(descriptor).sorted { $0.date < $1.date }
+      events = fetchedEvents
       
-      // Check if we need to refresh events in the background
-      let oneHourAgo = Calendar.current.date(byAdding: .hour, value: -1, to: Date()) ?? Date()
-      if lastUpdateDate < oneHourAgo {
-        // Fetch updates in the background without blocking the UI
-        isBackgroundRefreshing = true
-        Task {
-          await refreshEvents()
-          isBackgroundRefreshing = false
-        }
+      print("Watch App: Loaded \(fetchedEvents.count) events")
+      
+      // If no events and this is the first launch, show loading state
+      if fetchedEvents.isEmpty && lastUpdateDate == Date.distantPast {
+        isInitialFetching = true
+        // Start monitoring for updates
+        startMonitoringForUpdates()
       }
+      
+      // Note: Background refresh is handled by the main app's onAppear
+      // to prevent conflicts and duplication
     } catch {
       print("Error loading events: \(error)")
     }
+    
+    isLoadingEvents = false
   }
   
   private func refreshEvents() async {
     do {
+      print("Watch App: Starting refresh...")
       let handler = QuiEventHandler(modelContainer: modelContext.container)
       try await handler.updateFromWeb(imageCache: imageCache)
+      
       // Reload events after updating
-      loadEvents()
+      let descriptor = FetchDescriptor<QuiEvent>()
+      let refreshedEvents = try modelContext.fetch(descriptor).sorted { $0.date < $1.date }
+      events = refreshedEvents
+      
+      print("Watch App: After refresh, loaded \(refreshedEvents.count) events")
     } catch {
       print("Error refreshing events: \(error)")
+    }
+  }
+  
+  private func reloadEvents() {
+    do {
+      let descriptor = FetchDescriptor<QuiEvent>()
+      let fetchedEvents = try modelContext.fetch(descriptor).sorted { $0.date < $1.date }
+      events = fetchedEvents
+      print("Watch App: Reloaded \(fetchedEvents.count) events")
+    } catch {
+      print("Error reloading events: \(error)")
+    }
+  }
+  
+  private func startMonitoringForUpdates() {
+    // Check for updates every 2 seconds until we have events or timeout
+    Task {
+      var attempts = 0
+      let maxAttempts = 30 // 60 seconds max
+      
+      while events.isEmpty && attempts < maxAttempts && isInitialFetching {
+        try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
+        await MainActor.run {
+          reloadEvents()
+        }
+        attempts += 1
+      }
+      
+      await MainActor.run {
+        isInitialFetching = false
+      }
     }
   }
   
@@ -82,10 +129,21 @@ struct ContentView: View {
     NavigationStack {
       VStack {
         if eventsForSelectedDate.isEmpty {
-          NoEventWatch(
-            nextEvent: nextEventAfter,
-            selectedDate: $selectedDate
-          )
+          if isInitialFetching {
+            VStack {
+              ProgressView()
+                .scaleEffect(1.5)
+              Text("Loading events...")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .padding(.top, 8)
+            }
+          } else {
+            NoEventWatch(
+              nextEvent: nextEventAfter,
+              selectedDate: $selectedDate
+            )
+          }
         } else {
           TabView(selection: $currentEvent) {
             ForEach(eventsForSelectedDate) { event in
@@ -106,7 +164,7 @@ struct ContentView: View {
         loadEvents()
       }
       .onReceive(NotificationCenter.default.publisher(for: WKExtension.applicationDidBecomeActiveNotification)) { _ in
-        loadEvents()
+        reloadEvents()
       }
       .onChange(of: selectedDate) {
         currentEvent = eventsForSelectedDate.first
@@ -172,17 +230,19 @@ struct ContentView: View {
             Button {
               showInfo.toggle()
             } label: {
-              Image(systemName: "info.circle")
+              Image(systemName: "ellipsis")
             }
             
             Spacer()
             
-            Button {
-              Task {
-                await refreshEvents()
+            if events.isEmpty {
+              Button {
+                Task {
+                  await refreshEvents()
+                }
+              } label: {
+                Image(systemName: "arrow.clockwise")
               }
-            } label: {
-              Image(systemName: "arrow.clockwise")
             }
           }
         }

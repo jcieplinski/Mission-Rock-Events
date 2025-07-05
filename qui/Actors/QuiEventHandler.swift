@@ -69,9 +69,13 @@ actor QuiEventHandler {
       
       // Add new events, checking against existing events to avoid duplicates
       for newEvent in uniqueNewEvents {
-        let isAlreadyInExisting = existingEvents.contains(where: { $0.id == newEvent.id })
+        // Check if this event already exists in the database
+        let existingDescriptor = FetchDescriptor<QuiEvent>(predicate: #Predicate<QuiEvent> { event in
+          event.id == newEvent.id
+        })
+        let existingEvent = try modelContext.fetch(existingDescriptor).first
         
-        if !isAlreadyInExisting {
+        if existingEvent == nil {
           modelContext.insert(newEvent)
         }
       }
