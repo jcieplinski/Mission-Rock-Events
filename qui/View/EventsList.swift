@@ -12,7 +12,7 @@ import EventKit
 struct EventsList: View {
   @Environment(\.modelContext) private var modelContext
   @Environment(\.dismiss) private var dismiss
-  @Query(sort: \QuiEvent.date) private var events: [QuiEvent]
+  @State private var events: [QuiEvent] = []
   
   @State private var ekEvent: EKEvent?
   @State private var showEventEditor: Bool = false
@@ -22,6 +22,7 @@ struct EventsList: View {
   @Binding var selectedDate: Date
   
   let eventStore = EKEventStore()
+  var currentEvent: QuiEvent?
   
   private func updateFilteredEvents() {
     if searchText.isEmpty {
@@ -32,6 +33,16 @@ struct EventsList: View {
         event.location.localizedCaseInsensitiveContains(searchText) ||
         event.type.localizedCaseInsensitiveContains(searchText)
       }
+    }
+  }
+  
+  private func loadEvents() async {
+    do {
+      let descriptor = FetchDescriptor<QuiEvent>()
+      events = try modelContext.fetch(descriptor).sorted { $0.date < $1.date }
+      updateFilteredEvents()
+    } catch {
+      print("Error loading events: \(error)")
     }
   }
   
@@ -93,11 +104,10 @@ struct EventsList: View {
       .onChange(of: searchText) { _, _ in
         updateFilteredEvents()
       }
-      .onChange(of: events) { _, _ in
-        updateFilteredEvents()
-      }
       .onAppear {
-        updateFilteredEvents()
+        Task {
+          await loadEvents()
+        }
       }
       .scrollBounceBehavior(.basedOnSize)
       .scrollContentBackground(.hidden)
@@ -111,12 +121,16 @@ struct EventsList: View {
       })
       .toolbar {
         ToolbarItem(placement: .topBarTrailing) {
-          Button {
-            dismiss()
-          } label: {
-            Label("Done", systemImage: "xmark.circle.fill")
-              .symbolRenderingMode(.hierarchical)
-              .foregroundStyle(.primary)
+          if #available(iOS 26.0, *) {
+            Button(role: .confirm) {
+              dismiss()
+            }
+            .tint(currentEvent != nil ? currentEvent?.eventLocation.backgroundColor ?? .primary : .primary)
+          } else {
+            Button(action: { dismiss() }) {
+              Image(systemName: "xmark")
+            }
+            .accessibilityLabel("Done")
           }
         }
       }

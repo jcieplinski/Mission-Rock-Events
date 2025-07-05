@@ -34,7 +34,8 @@ struct TodayEventsIntent: AppIntent {
   static var openAppWhenRun: Bool = false
   
   func perform() async throws -> some IntentResult & ReturnsValue<String> & ProvidesDialog {
-    let events = try await QuiEventHandler(modelContainer: sharedModelContainer).fetch()
+    let handler = QuiEventHandler(modelContainer: sharedModelContainer)
+    let events = try await handler.fetch()
     
     if let todayEvent = events.filter({ $0.date.isToday() }).sorted(by: { $0.date < $1.date }).first {
       return .result(

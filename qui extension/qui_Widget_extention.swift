@@ -63,7 +63,8 @@ struct Provider: AppIntentTimelineProvider {
     }()
     
     do {
-      let events = try await QuiEventHandler(modelContainer: sharedModelContainer).fetch()
+      let handler = QuiEventHandler(modelContainer: sharedModelContainer)
+      let events = try await handler.fetch()
       
       if let todayEvent = events.filter({ $0.date.isToday() }).sorted(by: { $0.date < $1.date }).first {
         if let url = URL(string: todayEvent.imageURL ?? "") {
@@ -117,15 +118,25 @@ struct SimpleEntry: TimelineEntry {
 
 struct Qui_Widget_ExtensionEntryView : View {
   @Environment(\.widgetFamily) var family
+  @Environment(\.modelContext) private var modelContext
   
   var entry: Provider.Entry
-  @Query(sort: \QuiEvent.date) private var events: [QuiEvent]
+  @State private var events: [QuiEvent] = []
   
   var nextEvent: QuiEvent? {
     return events
       .filter { $0.date > Calendar.current.startOfDay(for: Date()) }
       .sorted { $0.date < $1.date }
       .first
+  }
+  
+  private func loadEvents() async {
+    do {
+      let descriptor = FetchDescriptor<QuiEvent>()
+      events = try modelContext.fetch(descriptor).sorted { $0.date < $1.date }
+    } catch {
+      print("Error loading events: \(error)")
+    }
   }
   
   var body: some View {
@@ -172,6 +183,11 @@ struct Qui_Widget_ExtensionEntryView : View {
       }
     }
     .frame(maxWidth: .infinity)
+    .onAppear {
+      Task {
+        await loadEvents()
+      }
+    }
   }
 }
 

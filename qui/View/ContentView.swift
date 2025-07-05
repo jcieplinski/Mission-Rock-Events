@@ -13,7 +13,7 @@ import EventKitUI
 struct ContentView: View {
   @Environment(\.modelContext) private var modelContext
   @Environment(\.imageCache) private var imageCache
-  @Query(sort: \QuiEvent.date) private var events: [QuiEvent]
+  @State private var events: [QuiEvent] = []
   
   @State private var selectedDate: Date = Calendar.current.startOfDay(for: Date())
   @State private var currentEvent: QuiEvent?
@@ -21,6 +21,7 @@ struct ContentView: View {
   @State private var showEventList: Bool = false
   @State private var showInfo: Bool = false
   @State private var isRefreshing: Bool = false
+  @State private var isBackgroundRefreshing: Bool = false
   @AppStorage("lastUpdateDate") private var lastUpdateDate: Date = Date.distantPast
   
   let dateFormatter = DateFormatter()
@@ -47,10 +48,18 @@ struct ContentView: View {
   }
   
   var lastUpdateText: String {
+    var text = ""
     if lastUpdateDate == Date.distantPast {
-      return "Last Updated: Never"
+      text = "Last Updated: Never"
+    } else {
+      text = "Last Updated: \(lastUpdateDate.formatted(date: .abbreviated, time: .omitted))"
     }
-    return "Last Updated: \(lastUpdateDate.formatted(date: .abbreviated, time: .omitted))"
+    
+    if isBackgroundRefreshing {
+      text += " (updating...)"
+    }
+    
+    return text
   }
   
   var body: some View {
@@ -61,9 +70,9 @@ struct ContentView: View {
             nextEvent: nextEventAfter,
             selectedDate: $selectedDate
           )
-            .clipShape(RoundedRectangle(cornerRadius: 28))
-            .shadow(radius: 8)
-            .padding(22)
+          .clipShape(RoundedRectangle(cornerRadius: 28))
+          .shadow(radius: 8)
+          .padding(22)
         } else {
           ScrollView(.horizontal) {
             HStack {
@@ -89,6 +98,35 @@ struct ContentView: View {
           .scrollTargetBehavior(.viewAligned)
           .scrollIndicators(.hidden)
         }
+        
+        HStack(spacing: 8) {
+          Spacer()
+          
+          Text(lastUpdateText)
+            .font(.caption)
+            .foregroundStyle(.secondary)
+          
+          if events.isEmpty {
+            Button {
+              Task {
+                await refreshEvents()
+              }
+            } label: {
+              Image(systemName: "arrow.clockwise")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            }
+            .disabled(isRefreshing)
+          }
+          
+          Spacer()
+        }
+      }
+      .onAppear {
+        loadEvents()
+      }
+      .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+        loadEvents()
       }
       .onChange(of: selectedDate) {
         currentEvent = eventsForSelectedDate.first
@@ -114,7 +152,7 @@ struct ContentView: View {
           Button {
             showInfo.toggle()
           } label: {
-            Image(systemName: "info.circle")
+            Image(systemName: "info")
           }
         }
         
@@ -127,30 +165,10 @@ struct ContentView: View {
           .sheet(isPresented: $showDatePicker) {
             DateChooser(
               selectedDate: $selectedDate,
-              showDatePicker: $showDatePicker
+              showDatePicker: $showDatePicker,
+              currentEvent: currentEvent
             )
             .presentationBackground(.thinMaterial)
-          }
-          
-          Spacer()
-          
-          HStack(spacing: 8) {
-            Text(lastUpdateText)
-              .font(.caption)
-              .foregroundStyle(.secondary)
-            
-            if events.isEmpty {
-              Button {
-                Task {
-                  await refreshEvents()
-                }
-              } label: {
-                Image(systemName: "arrow.clockwise")
-                  .font(.caption)
-                  .foregroundStyle(.secondary)
-              }
-              .disabled(isRefreshing)
-            }
           }
           
           Spacer()
@@ -161,26 +179,26 @@ struct ContentView: View {
             Label("List", systemImage: "list.triangle")
           }
           .sheet(isPresented: $showEventList) {
-            EventsList(selectedDate: $selectedDate)
+            EventsList(selectedDate: $selectedDate, currentEvent: currentEvent)
               .presentationBackground(.thinMaterial)
           }
         }
         
-//        ToolbarItemGroup(placement: .bottomBar) {
-//          Button {
-//            deleteAllEvents()
-//          } label: {
-//            Label("Delete Fake Events", systemImage: "trash")
-//          }
-//          
-//          Spacer()
-//          
-//          Button {
-//            addFakeEvent()
-//          } label: {
-//            Label("Add Fake Event", systemImage: "plus")
-//          }
-//        }
+        //        ToolbarItemGroup(placement: .bottomBar) {
+        //          Button {
+        //            deleteAllEvents()
+        //          } label: {
+        //            Label("Delete Fake Events", systemImage: "trash")
+        //          }
+        //
+        //          Spacer()
+        //
+        //          Button {
+        //            addFakeEvent()
+        //          } label: {
+        //            Label("Add Fake Event", systemImage: "plus")
+        //          }
+        //        }
       }
       .sheet(isPresented: $showInfo) {
         InfoView()
@@ -193,12 +211,35 @@ struct ContentView: View {
     }
   }
   
+  private func loadEvents() {
+    do {
+      // Load existing events immediately from database (synchronous)
+      let descriptor = FetchDescriptor<QuiEvent>()
+      events = try modelContext.fetch(descriptor).sorted { $0.date < $1.date }
+      
+      // Check if we need to refresh events in the background
+      let oneHourAgo = Calendar.current.date(byAdding: .hour, value: -1, to: Date()) ?? Date()
+      if lastUpdateDate < oneHourAgo {
+        // Fetch updates in the background without blocking the UI
+        isBackgroundRefreshing = true
+        Task {
+          await refreshEvents()
+          isBackgroundRefreshing = false
+        }
+      }
+    } catch {
+      print("Error loading events: \(error)")
+    }
+  }
+  
   private func refreshEvents() async {
     isRefreshing = true
     
     do {
       let handler = QuiEventHandler(modelContainer: modelContext.container)
       try await handler.updateFromWeb(imageCache: imageCache)
+      // Reload events after updating
+      await loadEvents()
     } catch {
       // Handle error if needed
       print("Error refreshing events: \(error)")
@@ -228,3 +269,4 @@ struct ContentView: View {
   ContentView()
     .modelContainer(for: QuiEvent.self, inMemory: true)
 }
+

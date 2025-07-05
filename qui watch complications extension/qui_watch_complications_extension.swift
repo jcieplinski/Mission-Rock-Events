@@ -49,9 +49,10 @@ struct SimpleEntry: TimelineEntry {
 
 struct qui_watch_complications_extensionEntryView : View {
   @Environment(\.widgetFamily) var family
+  @Environment(\.modelContext) private var modelContext
   
   var entry: Provider.Entry
-  @Query(sort: \QuiEvent.date) private var events: [QuiEvent]
+  @State private var events: [QuiEvent] = []
   
   var todayEvents: [QuiEvent] {
     return events.filter { $0.date.isToday() }.sorted { $0.date < $1.date }
@@ -62,6 +63,15 @@ struct qui_watch_complications_extensionEntryView : View {
       .filter { $0.date > Calendar.current.startOfDay(for: Date()) }
       .sorted { $0.date < $1.date }
       .first
+  }
+  
+  private func loadEvents() async {
+    do {
+      let descriptor = FetchDescriptor<QuiEvent>()
+      events = try modelContext.fetch(descriptor).sorted { $0.date < $1.date }
+    } catch {
+      print("Error loading events: \(error)")
+    }
   }
   
   var body: some View {
@@ -123,6 +133,11 @@ struct qui_watch_complications_extensionEntryView : View {
         }
       @unknown default:
         Text("\(todayEvents.count)")
+      }
+    }
+    .onAppear {
+      Task {
+        await loadEvents()
       }
     }
   }

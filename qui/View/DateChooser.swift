@@ -10,7 +10,7 @@ import SwiftUI
 struct DateChooser: View {
   @Binding var selectedDate: Date
   @Binding var showDatePicker: Bool
-  
+  var currentEvent: QuiEvent?
   
   var body: some View {
     NavigationStack {
@@ -50,15 +50,23 @@ struct DateChooser: View {
           }
         }
         
-        ToolbarItem(placement: .topBarTrailing) {
-          Button {
-            showDatePicker = false
-          } label: {
-            Label("Done", systemImage: "xmark.circle.fill")
-              .symbolRenderingMode(.hierarchical)
-              .foregroundStyle(.primary)
-          }
-          .tint(.primary)
+          ToolbarItem(placement: .topBarTrailing) {
+            if #available(iOS 26.0, *) {
+                Button(role: .confirm) {
+                    showDatePicker = false
+                }
+                .tint(currentEvent != nil ? currentEvent?.eventLocation.backgroundColor ?? .primary : .primary)
+                
+            } else {
+                Button {
+                    showDatePicker = false
+                } label: {
+                    Label("Done", systemImage: "xmark.circle.fill")
+                        .symbolRenderingMode(.hierarchical)
+                        .foregroundStyle(.primary)
+                }
+                .tint(.primary)
+            }
         }
         #endif
       }
@@ -76,7 +84,9 @@ struct DateChooser: View {
   .sheet(isPresented: .constant(true)) {
     DateChooser(
       selectedDate: $selectedDate,
-      showDatePicker: $showDatePicker
+      showDatePicker: $showDatePicker,
+      currentEvent: nil
     )
   }
 }
+

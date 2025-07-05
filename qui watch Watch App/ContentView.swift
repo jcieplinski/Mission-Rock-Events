@@ -8,16 +8,20 @@
 import SwiftUI
 import SwiftData
 import WidgetKit
+import WatchKit
 
 struct ContentView: View {
   @Environment(\.modelContext) private var modelContext
-  @Query(sort: \QuiEvent.date) private var events: [QuiEvent]
+  @Environment(\.imageCache) private var imageCache
+  @State private var events: [QuiEvent] = []
   
   @State private var selectedDate: Date = Calendar.current.startOfDay(for: Date())
   @State private var currentEvent: QuiEvent?
   @State private var showDatePicker: Bool = false
   @State private var showEventList: Bool = false
   @State private var showInfo: Bool = false
+  @State private var isBackgroundRefreshing: Bool = false
+  @AppStorage("lastUpdateDate") private var lastUpdateDate: Date = Date.distantPast
   
   let dateFormatter = DateFormatter()
   
@@ -40,6 +44,38 @@ struct ContentView: View {
       .filter { $0.date > selectedDate }
       .sorted { $0.date < $1.date }
       .first
+  }
+  
+  private func loadEvents() {
+    do {
+      // Load existing events immediately from database (synchronous)
+      let descriptor = FetchDescriptor<QuiEvent>()
+      events = try modelContext.fetch(descriptor).sorted { $0.date < $1.date }
+      
+      // Check if we need to refresh events in the background
+      let oneHourAgo = Calendar.current.date(byAdding: .hour, value: -1, to: Date()) ?? Date()
+      if lastUpdateDate < oneHourAgo {
+        // Fetch updates in the background without blocking the UI
+        isBackgroundRefreshing = true
+        Task {
+          await refreshEvents()
+          isBackgroundRefreshing = false
+        }
+      }
+    } catch {
+      print("Error loading events: \(error)")
+    }
+  }
+  
+  private func refreshEvents() async {
+    do {
+      let handler = QuiEventHandler(modelContainer: modelContext.container)
+      try await handler.updateFromWeb(imageCache: imageCache)
+      // Reload events after updating
+      loadEvents()
+    } catch {
+      print("Error refreshing events: \(error)")
+    }
   }
   
   var body: some View {
@@ -66,6 +102,12 @@ struct ContentView: View {
         }
       }
       .ignoresSafeArea([])
+      .onAppear {
+        loadEvents()
+      }
+      .onReceive(NotificationCenter.default.publisher(for: WKExtension.applicationDidBecomeActiveNotification)) { _ in
+        loadEvents()
+      }
       .onChange(of: selectedDate) {
         currentEvent = eventsForSelectedDate.first
       }
@@ -111,7 +153,8 @@ struct ContentView: View {
           .sheet(isPresented: $showDatePicker) {
             DateChooser(
               selectedDate: $selectedDate,
-              showDatePicker: $showDatePicker
+              showDatePicker: $showDatePicker,
+              currentEvent: currentEvent
             )
           }
         }
@@ -133,6 +176,14 @@ struct ContentView: View {
             }
             
             Spacer()
+            
+            Button {
+              Task {
+                await refreshEvents()
+              }
+            } label: {
+              Image(systemName: "arrow.clockwise")
+            }
           }
         }
         

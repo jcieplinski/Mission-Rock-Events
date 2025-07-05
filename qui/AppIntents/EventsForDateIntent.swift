@@ -37,7 +37,8 @@ struct EventsForDateIntent: AppIntent {
   static var openAppWhenRun: Bool = false
   
   func perform() async throws -> some IntentResult & ReturnsValue<String> & ProvidesDialog {
-    let events = try await QuiEventHandler(modelContainer: sharedModelContainer).fetch()
+    let handler = QuiEventHandler(modelContainer: sharedModelContainer)
+    let events = try await handler.fetch()
     let calendar = Calendar.current
     
     guard let day else { return .result(value: "No Date Specified", dialog: "I need to know which day you mean") }

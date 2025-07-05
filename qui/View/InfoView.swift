@@ -146,8 +146,16 @@ struct InfoView: View {
       .toolbar {
 #if os(iOS)
         ToolbarItem(placement: .topBarTrailing) {
-          Button("Done") {
-            dismiss()
+          if #available(iOS 26.0, *) {
+            Button(role: .confirm) {
+              dismiss()
+            }
+            .tint(.oracleOrange)
+            
+          } else {
+            Button("Done") {
+              dismiss()
+            }
           }
         }
 #endif

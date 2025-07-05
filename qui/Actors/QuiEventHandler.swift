@@ -14,7 +14,7 @@ actor QuiEventHandler {
   
   @AppStorage("lastUpdateDate") private var lastUpdateDate: Date = Date.distantPast
   
-  public func fetch() throws -> [QuiEventEntity] {
+  public func fetch() async throws -> [QuiEventEntity] {
     let descriptor = FetchDescriptor<QuiEvent>()
     let fetchedEvents = try modelContext.fetch(descriptor).sorted{ $0.date < $1.date }
     
@@ -36,14 +36,15 @@ actor QuiEventHandler {
       let descriptor = FetchDescriptor<QuiEvent>()
       let existingEvents = try modelContext.fetch(descriptor)
       
-      // Keep track of today's events
+      // Keep track of today's events and future events
       let calendar = Calendar.current
       let today = calendar.startOfDay(for: Date())
       let todaysEvents = existingEvents.filter { calendar.startOfDay(for: $0.date) == today }
+      let futureEvents = existingEvents.filter { calendar.startOfDay(for: $0.date) > today }
       
       // Collect URLs of images we want to keep
       var imageURLsToKeep = Set<URL>()
-      for event in newEvents + newSpecialEvents + todaysEvents {
+      for event in newEvents + newSpecialEvents + todaysEvents + futureEvents {
         if let imageURLString = event.imageURL,
            let imageURL = URL(string: imageURLString) {
           imageURLsToKeep.insert(imageURL)
@@ -53,9 +54,9 @@ actor QuiEventHandler {
       // Clean up image cache
       await imageCache.cleanup(keeping: imageURLsToKeep)
       
-      // Delete all events except today's
+      // Delete only past events (not today's or future events)
       for event in existingEvents {
-        if !todaysEvents.contains(where: { $0.id == event.id }) {
+        if calendar.startOfDay(for: event.date) < today {
           modelContext.delete(event)
         }
       }
@@ -66,12 +67,11 @@ actor QuiEventHandler {
         allNewEvents.first { $0.id == id }
       }
       
-      // Add new events, checking against both today's events and existing events
+      // Add new events, checking against existing events to avoid duplicates
       for newEvent in uniqueNewEvents {
-        let isAlreadyInToday = todaysEvents.contains(where: { $0.id == newEvent.id })
         let isAlreadyInExisting = existingEvents.contains(where: { $0.id == newEvent.id })
         
-        if !isAlreadyInToday && !isAlreadyInExisting {
+        if !isAlreadyInExisting {
           modelContext.insert(newEvent)
         }
       }
