@@ -63,13 +63,23 @@ struct Provider: AppIntentTimelineProvider {
     }()
     
     do {
+      // Use QuiEventHandler to get QuiEventEntity objects (which are Sendable)
       let handler = QuiEventHandler(modelContainer: sharedModelContainer)
       let events = try await handler.fetch()
       
-      if let todayEvent = events.filter({ $0.date.isToday() }).sorted(by: { $0.date < $1.date }).first {
+      Logger.swiftData.info("Widget: Fetched \(events.count) events from QuiEventHandler")
+      
+      let calendar = Calendar.current
+      let today = calendar.startOfDay(for: Date())
+      let todayEvents = events.filter({ calendar.startOfDay(for: $0.date) == today })
+      Logger.swiftData.info("Widget: Found \(todayEvents.count) events for today")
+      
+      if let todayEvent = todayEvents.first {
         if let url = URL(string: todayEvent.imageURL ?? "") {
+          Logger.swiftData.info("Widget: Loading image from URL: \(url)")
           let imageData = try Data(contentsOf: url)
           let image = UIImage(data: imageData)
+          Logger.swiftData.info("Widget: Image loaded successfully: \(image != nil)")
           let entry = SimpleEntry(
             date: Date(),
             configuration: configuration,
@@ -89,6 +99,7 @@ struct Provider: AppIntentTimelineProvider {
           return entry
         }
       } else {
+        Logger.swiftData.info("Widget: No events found for today")
         let entry = SimpleEntry(
           date: Date(),
           configuration: configuration,
@@ -99,7 +110,8 @@ struct Provider: AppIntentTimelineProvider {
         return entry
       }
     } catch {
-      Logger.swiftData.error("Error fetching events: \(error)")
+      Logger.swiftData.error("Widget: Error fetching events: \(error)")
+      // Return a simple entry with no event to prevent widget from crashing
       return SimpleEntry(date: Date(), configuration: configuration, todayEvent: nil, todayEventImage: nil)
     }
   }
@@ -118,26 +130,8 @@ struct SimpleEntry: TimelineEntry {
 
 struct Qui_Widget_ExtensionEntryView : View {
   @Environment(\.widgetFamily) var family
-  @Environment(\.modelContext) private var modelContext
   
   var entry: Provider.Entry
-  @State private var events: [QuiEvent] = []
-  
-  var nextEvent: QuiEvent? {
-    return events
-      .filter { $0.date > Calendar.current.startOfDay(for: Date()) }
-      .sorted { $0.date < $1.date }
-      .first
-  }
-  
-  private func loadEvents() async {
-    do {
-      let descriptor = FetchDescriptor<QuiEvent>()
-      events = try modelContext.fetch(descriptor).sorted { $0.date < $1.date }
-    } catch {
-      print("Error loading events: \(error)")
-    }
-  }
   
   var body: some View {
     VStack {
@@ -146,7 +140,7 @@ struct Qui_Widget_ExtensionEntryView : View {
         if let todayEvent = entry.todayEvent {
           EntryCardWidgetView(event: todayEvent, image: entry.todayEventImage)
         } else {
-          NoEventWidgetView(nextEvent: nextEvent)
+          NoEventWidgetView(nextEvent: nil)
         }
       case .accessoryCircular:
         if let image = entry.todayEventImage {
@@ -183,11 +177,6 @@ struct Qui_Widget_ExtensionEntryView : View {
       }
     }
     .frame(maxWidth: .infinity)
-    .onAppear {
-      Task {
-        await loadEvents()
-      }
-    }
   }
 }
 

@@ -39,7 +39,13 @@ struct EventsList: View {
   private func loadEvents() async {
     do {
       let descriptor = FetchDescriptor<QuiEvent>()
-      events = try modelContext.fetch(descriptor).sorted { $0.date < $1.date }
+      let fetchedEvents = try modelContext.fetch(descriptor).sorted { $0.date < $1.date }
+      
+      // Deduplicate events based on their unique ID
+      events = Array(Set(fetchedEvents.map { $0.id })).compactMap { id in
+        fetchedEvents.first { $0.id == id }
+      }.sorted { $0.date < $1.date }
+      
       updateFilteredEvents()
     } catch {
       print("Error loading events: \(error)")

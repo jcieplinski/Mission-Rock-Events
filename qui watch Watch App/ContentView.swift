@@ -57,7 +57,11 @@ struct ContentView: View {
       // Load existing events immediately from database (synchronous)
       let descriptor = FetchDescriptor<QuiEvent>()
       let fetchedEvents = try modelContext.fetch(descriptor).sorted { $0.date < $1.date }
-      events = fetchedEvents
+      
+      // Deduplicate events based on their unique ID
+      events = Array(Set(fetchedEvents.map { $0.id })).compactMap { id in
+        fetchedEvents.first { $0.id == id }
+      }.sorted { $0.date < $1.date }
       
       print("Watch App: Loaded \(fetchedEvents.count) events")
       
@@ -86,7 +90,11 @@ struct ContentView: View {
       // Reload events after updating
       let descriptor = FetchDescriptor<QuiEvent>()
       let refreshedEvents = try modelContext.fetch(descriptor).sorted { $0.date < $1.date }
-      events = refreshedEvents
+      
+      // Deduplicate events based on their unique ID
+      events = Array(Set(refreshedEvents.map { $0.id })).compactMap { id in
+        refreshedEvents.first { $0.id == id }
+      }.sorted { $0.date < $1.date }
       
       print("Watch App: After refresh, loaded \(refreshedEvents.count) events")
     } catch {
@@ -98,7 +106,12 @@ struct ContentView: View {
     do {
       let descriptor = FetchDescriptor<QuiEvent>()
       let fetchedEvents = try modelContext.fetch(descriptor).sorted { $0.date < $1.date }
-      events = fetchedEvents
+      
+      // Deduplicate events based on their unique ID
+      events = Array(Set(fetchedEvents.map { $0.id })).compactMap { id in
+        fetchedEvents.first { $0.id == id }
+      }.sorted { $0.date < $1.date }
+      
       print("Watch App: Reloaded \(fetchedEvents.count) events")
     } catch {
       print("Error reloading events: \(error)")
@@ -114,7 +127,17 @@ struct ContentView: View {
       while events.isEmpty && attempts < maxAttempts && isInitialFetching {
         try? await Task.sleep(nanoseconds: 2_000_000_000) // 2 seconds
         await MainActor.run {
-          reloadEvents()
+          do {
+            let descriptor = FetchDescriptor<QuiEvent>()
+            let fetchedEvents = try modelContext.fetch(descriptor).sorted { $0.date < $1.date }
+            
+            // Deduplicate events based on their unique ID
+            events = Array(Set(fetchedEvents.map { $0.id })).compactMap { id in
+              fetchedEvents.first { $0.id == id }
+            }.sorted { $0.date < $1.date }
+          } catch {
+            print("Error monitoring for updates: \(error)")
+          }
         }
         attempts += 1
       }

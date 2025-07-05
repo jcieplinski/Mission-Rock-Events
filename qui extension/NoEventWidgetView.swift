@@ -12,13 +12,13 @@ struct NoEventWidgetView: View {
   @Environment(\.widgetFamily) var family
   let nextEvent: QuiEvent?
   
-  @State private var noEventTitle: String = ""
-  @State private var noEventSubtitle: String = ""
+  @State private var noEventTitle: String = "No Events Today"
+  @State private var noEventSubtitle: String = "Check back later!"
   
   var body: some View {
     VStack() {
       HStack {
-        Text("No Events Today")
+        Text(noEventTitle)
           .font(.title3)
           .fontDesign(.rounded)
           .minimumScaleFactor(0.6)
@@ -80,8 +80,9 @@ struct NoEventWidgetView: View {
       }
     )
     .onAppear {
-      noEventTitle = NoEventTitles.getRandomTitle()
-      noEventSubtitle = NoEventTitles.getRandomSubtitle()
+      // For widgets, use simple static text to avoid complexity
+      noEventTitle = "No Events Today"
+      noEventSubtitle = "Check back later!"
     }
   }
 }

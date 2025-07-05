@@ -18,7 +18,12 @@ actor QuiEventHandler {
     let descriptor = FetchDescriptor<QuiEvent>()
     let fetchedEvents = try modelContext.fetch(descriptor).sorted{ $0.date < $1.date }
     
-    return fetchedEvents.map(QuiEventEntity.init)
+    // Deduplicate events based on their unique ID
+    let uniqueEvents = Array(Set(fetchedEvents.map { $0.id })).compactMap { id in
+      fetchedEvents.first { $0.id == id }
+    }.sorted { $0.date < $1.date }
+    
+    return uniqueEvents.map(QuiEventEntity.init)
   }
   
   public func updateFromWeb(imageCache: ImageCache) async throws {
@@ -77,6 +82,17 @@ actor QuiEventHandler {
         
         if existingEvent == nil {
           modelContext.insert(newEvent)
+        } else {
+          // Update existing event with new data if needed
+          existingEvent?.title = newEvent.title
+          existingEvent?.type = newEvent.type
+          existingEvent?.location = newEvent.location
+          existingEvent?.date = newEvent.date
+          existingEvent?.timeTBD = newEvent.timeTBD
+          existingEvent?.performers = newEvent.performers
+          existingEvent?.url = newEvent.url
+          existingEvent?.imageURL = newEvent.imageURL
+          existingEvent?.source = newEvent.source
         }
       }
       

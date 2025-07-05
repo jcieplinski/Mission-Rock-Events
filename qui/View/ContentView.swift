@@ -228,7 +228,12 @@ struct ContentView: View {
     do {
       // Load existing events immediately from database (synchronous)
       let descriptor = FetchDescriptor<QuiEvent>()
-      events = try modelContext.fetch(descriptor).sorted { $0.date < $1.date }
+      let fetchedEvents = try modelContext.fetch(descriptor).sorted { $0.date < $1.date }
+      
+      // Deduplicate events based on their unique ID
+      events = Array(Set(fetchedEvents.map { $0.id })).compactMap { id in
+        fetchedEvents.first { $0.id == id }
+      }.sorted { $0.date < $1.date }
       
       // If no events and this is the first launch, show loading state
       if events.isEmpty && lastUpdateDate == Date.distantPast {
@@ -260,7 +265,12 @@ struct ContentView: View {
       try await handler.updateFromWeb(imageCache: imageCache)
       // Reload events after updating
       let descriptor = FetchDescriptor<QuiEvent>()
-      events = try modelContext.fetch(descriptor).sorted { $0.date < $1.date }
+      let fetchedEvents = try modelContext.fetch(descriptor).sorted { $0.date < $1.date }
+      
+      // Deduplicate events based on their unique ID
+      events = Array(Set(fetchedEvents.map { $0.id })).compactMap { id in
+        fetchedEvents.first { $0.id == id }
+      }.sorted { $0.date < $1.date }
     } catch {
       // Handle error if needed
       print("Error refreshing events: \(error)")
@@ -296,7 +306,12 @@ struct ContentView: View {
         await MainActor.run {
           do {
             let descriptor = FetchDescriptor<QuiEvent>()
-            events = try modelContext.fetch(descriptor).sorted { $0.date < $1.date }
+            let fetchedEvents = try modelContext.fetch(descriptor).sorted { $0.date < $1.date }
+            
+            // Deduplicate events based on their unique ID
+            events = Array(Set(fetchedEvents.map { $0.id })).compactMap { id in
+              fetchedEvents.first { $0.id == id }
+            }.sorted { $0.date < $1.date }
           } catch {
             print("Error monitoring for updates: \(error)")
           }
